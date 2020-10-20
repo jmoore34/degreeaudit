@@ -86,11 +86,16 @@ const ResizableBox: FunctionComponent<{}> = () => {
         //size={{ width: width, height: height }}
         //position={{ x: x, y: y }}
         onDragStop={(e, d) => {
-            //console.log(d)
-            //setX(d.x)
-            //setY(d.y)
 
-            console.log(`x: d.x`)
+            if (e.target) {
+                const event = e as Event
+                const flowchart = (e.target as HTMLElement)?.parentElement?.parentElement
+                if (flowchart) {
+                    const x = d.x / flowchart.offsetWidth * 100
+                    const y = d.y / flowchart.offsetHeight * 100
+                    console.log({x, y})
+                }
+            }
         }}
         onResizeStop={(e, direction, ref, delta, position) => {
             //console.log(direction, position, delta)
