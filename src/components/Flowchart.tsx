@@ -1,7 +1,8 @@
-import React, {FunctionComponent, useState} from "react";
+import React, { FunctionComponent, useState } from "react";
 import styled from "styled-components";
 import cs from '../flowcharts/cs.webp';
-import {Rnd} from "react-rnd";
+import { Rnd } from "react-rnd";
+import { CourseInfoBox } from "./CourseInfoBox";
 
 const FlowchartBackground = styled.img`
     width: 100%;
@@ -23,9 +24,10 @@ const HighlightBox = styled.div<{ box: FlowchartBox }>`
 `;
 
 const SolidBox = styled.div`
-    background-color: rgba(15,245,172,0.65);
+    background-color: rgba(15,245,172,0.25);
     width: 100%;
     height: 100%;
+    border-radius: 14px;
 `;
 
 const FlowchartWrapper = styled.div`
@@ -41,6 +43,7 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
     return <>
         <FlowchartWrapper ref={ref}>
+            <CourseInfoBox></CourseInfoBox>
             <FlowchartBackground src={cs} />
             {flowchartBoxes.map(box =>
                 <HighlightBox box={box}></HighlightBox>
@@ -93,7 +96,7 @@ const ResizableBox: FunctionComponent<{}> = () => {
                 if (flowchart) {
                     const x = d.x / flowchart.offsetWidth * 100
                     const y = d.y / flowchart.offsetHeight * 100
-                    console.log({x, y})
+                    console.log({ x, y })
                 }
             }
         }}
