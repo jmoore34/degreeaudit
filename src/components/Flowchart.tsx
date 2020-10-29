@@ -5,6 +5,7 @@ import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 import { AnyNsRecord } from "dns";
+import { stringify } from "querystring";
 
 const FlowchartBackground = styled.img`
     width: 100%;
@@ -46,7 +47,8 @@ const FlowchartWrapper = styled.div`
 export const Flowchart: FunctionComponent<{}> = () => {
 
     const ref = React.useRef(null)
-    const [courseSemesters, setCourseSemesters]: any = useState({});
+    const localStorageKey = "courseSemesters"
+    const [courseSemestersMap, setCourseSemesters]: any = useState(JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {});
     const [selectedCourse, setSelectedCourse]: any = useState("");
 
     return <>
@@ -54,13 +56,18 @@ export const Flowchart: FunctionComponent<{}> = () => {
         <FlowchartWrapper ref={ref}>
             <CourseInfoBox yValue={(flowchartBoxes.find(box => box.name === selectedCourse))?.top}
                 course={selectedCourse}
-                semester={courseSemesters[selectedCourse]}
-                onSemesterChanged={newSemester => setCourseSemesters({ ...courseSemesters, [selectedCourse]: newSemester })}
+                semester={courseSemestersMap[selectedCourse]}
+                onSemesterChanged={(newSemester: string) => {
+                    const newMap = { ...courseSemestersMap, [selectedCourse]: newSemester }
+                    localStorage.setItem(localStorageKey, JSON.stringify(newMap));
+                    console.log(localStorage.getItem(localStorageKey));
+                    setCourseSemesters(newMap);
+                }}
             />
             <FlowchartBackground src={cs} />
             {flowchartBoxes.map(box =>
                 <HighlightBox box={box}
-                    color={getColorOfSemester(courseSemesters[box.name])}
+                    color={getColorOfSemester(courseSemestersMap[box.name])}
                     onClick={() => {
                         setSelectedCourse(box.name);
                     }}
