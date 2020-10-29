@@ -3,6 +3,8 @@ import styled from "styled-components";
 import cs from '../flowcharts/cs.webp';
 import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
+import Color from "color";
+import { AnyNsRecord } from "dns";
 
 const FlowchartBackground = styled.img`
     width: 100%;
@@ -11,16 +13,20 @@ const FlowchartBackground = styled.img`
 
 
 // @ts-ignore
-const HighlightBox = styled.div<{ box: FlowchartBox }>`
+const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     top: ${props => props.box.top}%;
     left: ${props => props.box.left}%;
     bottom: ${props => props.box.bottom}%;
     right: ${props => props.box.right}%;
     :hover {
-      background-color: rgba(1,0,0,0.3);
+      background-color: ${props => props.color === "transparent" ? Color("black").fade(.8).toString() : Color(props.color).fade(.5).darken(.1).toString()};
     }
+    transition: all .15s;
+    cursor: pointer;
+    background-color: ${props => Color(props.color).lighten(.1).fade(.5).toString()};
     position: absolute;
     border-radius: 14px;
+    z-index: 2;
 `;
 
 const SolidBox = styled.div`
@@ -40,22 +46,56 @@ const FlowchartWrapper = styled.div`
 export const Flowchart: FunctionComponent<{}> = () => {
 
     const ref = React.useRef(null)
+    const [courseSemesters, setCourseSemesters]: any = useState({});
+    const [selectedCourse, setSelectedCourse]: any = useState("");
 
     return <>
+        {selectedCourse}
         <FlowchartWrapper ref={ref}>
-            <CourseInfoBox></CourseInfoBox>
+            <CourseInfoBox yValue={(flowchartBoxes.find(box => box.name === selectedCourse))?.top}
+                course={selectedCourse}
+                semester={courseSemesters[selectedCourse]}
+                onSemesterChanged={newSemester => setCourseSemesters({ ...courseSemesters, [selectedCourse]: newSemester })}
+            />
             <FlowchartBackground src={cs} />
             {flowchartBoxes.map(box =>
-                <HighlightBox box={box}></HighlightBox>
+                <HighlightBox box={box}
+                    color={getColorOfSemester(courseSemesters[box.name])}
+                    onClick={() => {
+                        setSelectedCourse(box.name);
+                    }}
+                >
+
+                </HighlightBox>
             )}
             <ResizableBox />
         </FlowchartWrapper>
     </>
+
+
+}
+
+export function getColorOfSemester(semester: string) {
+    if (!semester) {
+        return "transparent";
+    }
+    const hue = TSH(semester) % 360;
+    if (semester === "Previous Semesters")
+        return "gray";
+    else
+        return `hsl(${hue}, 100%, 50%)`;
+
+}
+
+function TSH(s: string) {
+    for (var i = 0, h = 9; i < s.length;)
+        h = Math.imul(h ^ s.charCodeAt(i++), 9 ** 9);
+    return h ^ h >>> 9
 }
 
 
 interface FlowchartBox {
-    name: String
+    name: string
     left: any // percentage
     top: any
     right: any
@@ -64,7 +104,7 @@ interface FlowchartBox {
 
 const flowchartBoxes: Array<FlowchartBox> = [
     {
-        name: "ECS 1100",
+        name: "ecs 1100",
         top: 8.8,
         left: 35.2,
         bottom: 88.3,

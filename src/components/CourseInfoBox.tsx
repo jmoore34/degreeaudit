@@ -2,13 +2,18 @@ import React, { FunctionComponent, useState } from "react";
 import { Component } from 'react';
 import styled from "styled-components";
 import Color from "color";
+import { getColorOfSemester } from "./Flowchart";
 
-const InfoBox = styled.div`
+
+const InfoBox = styled.div <{ yVal: string }>`
     z-index: 10;
     position: absolute;
     background-color: rgba(255,255,255,0.85);
     border: 1px solid black;
     width: 40;
+    top: calc(${props => props.yVal}% + 5%);
+    margin-left: auto;
+    margin-right: auto;
     padding: 1rem;
     padding-bottom: 3rem;
     border-radius: 14px;
@@ -45,7 +50,6 @@ const CourseFrame = styled.iframe <{}>`
 const IFrameWrapper = styled.div <{}>`
     overflow: hidden;
     position: relative;
-    border: 1px solid red;
     top:-10px;
     height: 390px;
     //background-color: blue;
@@ -57,27 +61,30 @@ const SiblingDiv = styled.div <{}>`
     height: 390px;
 `
 
-export const CourseInfoBox: FunctionComponent<{}> = (props) => {
-    const [semester, setSemester] = useState("");
+export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string }> = (props) => {
+    //const [semester, setSemester] = useState("");
 
+    if (!props.course) {
+        return <></>
+    }
 
     return <>
-        <InfoBox>
+        <InfoBox yVal={props.yValue}>
             {/*<IFrameWrapper>
-                <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/cs2305" height="400" width="600" scrolling="no"></CourseFrame>
+                <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/" height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>*/}
             <IFrameWrapper>
-                <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/cs2305" height="400" width="600" scrolling="no"></CourseFrame>
+                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>
             <ButtonContainer>
                 {["Previous Semesters", "Current Semester", "Spring 21", "Sum. 21", "Fall 21", "Spring 22", "Sum. 22", "Fall 22", "Spring 23", "Sum. 23", "Fall 23",
                     "Spring 24", "Sum. 24", "Fall 24"].map((sem, index, arr) =>
                         <SemesterButton
-                            color={`hsl(${(index / arr.length) * 360},100%,50%)`}
-                            selected={semester === sem}
+                            color={getColorOfSemester(sem)}
+                            selected={props.semester === sem}
                             doubleWidth={sem.includes("Sem") ? true : false}
                             onClick={() => {
-                                setSemester(sem);
+                                props.onSemesterChanged(sem);
                             }}>
                             {sem}
                         </SemesterButton>)}
