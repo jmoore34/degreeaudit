@@ -4,8 +4,6 @@ import cs from '../flowcharts/cs.webp';
 import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
-import { AnyNsRecord } from "dns";
-import { stringify } from "querystring";
 
 const FlowchartBackground = styled.img`
     width: 100%;
