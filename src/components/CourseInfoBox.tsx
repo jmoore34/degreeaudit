@@ -56,9 +56,12 @@ const IFrameWrapper = styled.div <{}>`
 `
 const SiblingDiv = styled.div <{}>`
     background-color: blue;
+    top: 50%;
+    left: 0;
     position: absolute;
-    width: 70%;
+    width: 100%;
     height: 390px;
+    z-index: 5;
 `
 
 export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string }> = (props) => {
@@ -74,7 +77,9 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
                 <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/" height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>*/}
             <IFrameWrapper>
-                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
+                <CourseFrame src={"https://catalog.utdallas.edu/now/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
+                <SiblingDiv>
+                </SiblingDiv>
             </IFrameWrapper>
             <ButtonContainer>
                 {["Previous Semesters", "Current Semester", "Spring 21", "Sum. 21", "Fall 21", "Spring 22", "Sum. 22", "Fall 22", "Spring 23", "Sum. 23", "Fall 23",
