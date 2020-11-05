@@ -5,18 +5,17 @@ import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 
-const FlowchartBackground = styled.img`
+export const FlowchartBackground = styled.img`
     width: 100%;
     //height: auto;
 `;
 
 
-// @ts-ignore
-const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
+export const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     top: ${props => props.box.top}%;
     left: ${props => props.box.left}%;
-    bottom: ${props => props.box.bottom}%;
-    right: ${props => props.box.right}%;
+    width: ${props => props.box.width}%;
+    height: ${props => props.box.height}%;
     :hover {
       background-color: ${props => props.color === "transparent" ? Color("black").fade(.8).toString() : Color(props.color).fade(.5).darken(.1).toString()};
     }
@@ -24,18 +23,11 @@ const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     cursor: pointer;
     background-color: ${props => Color(props.color).lighten(.1).fade(.5).toString()};
     position: absolute;
-    border-radius: 14px;
+    border-radius: 20%;
     z-index: 2;
 `;
 
-const SolidBox = styled.div`
-    background-color: rgba(15,245,172,0.25);
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-`;
-
-const FlowchartWrapper = styled.div`
+export const FlowchartWrapper = styled.div`
     border: 1px black solid;
     margin: 7vw;
     width: 75vw;
@@ -43,7 +35,6 @@ const FlowchartWrapper = styled.div`
 `;
 
 export const Flowchart: FunctionComponent<{}> = () => {
-
     const ref = React.useRef(null)
     const localStorageKey = "courseSemesters"
     const [courseSemestersMap, setCourseSemesters]: any = useState(JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {});
@@ -73,7 +64,6 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
                 </HighlightBox>
             )}
-            <ResizableBox />
         </FlowchartWrapper>
     </>
 
@@ -99,12 +89,12 @@ function TSH(s: string) {
 }
 
 
-interface FlowchartBox {
+export interface FlowchartBox {
     name: string
     left: any // percentage
     top: any
-    right: any
-    bottom: any
+    height: any
+    width: any
 }
 
 const flowchartBoxes: Array<FlowchartBox> = [
@@ -112,44 +102,11 @@ const flowchartBoxes: Array<FlowchartBox> = [
         name: "ecs 1100",
         top: 8.8,
         left: 35.2,
-        bottom: 88.3,
-        right: 57.5
+        height: 5,
+        width: 5
     }
 ]
 
-const style = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "solid 1px #ddd",
-    background: "#f0f0f0"
-};
 
 
-const ResizableBox: FunctionComponent<{}> = () => {
-    const ref = React.useRef(null)
-    return <Rnd
-        //default={{x: 0, y:0, width: '10%', height: '10%'}}
-        style={style}
-        //size={{ width: width, height: height }}
-        //position={{ x: x, y: y }}
-        onDragStop={(e, d) => {
 
-            if (e.target) {
-                const event = e as Event
-                const flowchart = (e.target as HTMLElement)?.parentElement?.parentElement
-                if (flowchart) {
-                    const x = d.x / flowchart.offsetWidth * 100
-                    const y = d.y / flowchart.offsetHeight * 100
-                    console.log({ x, y })
-                }
-            }
-        }}
-        onResizeStop={(e, direction, ref, delta, position) => {
-            //console.log(direction, position, delta)
-            //console.log(`width: ${ref.offsetWidth}px height: ${ref.offsetHeight}px `)
-        }}
-    >
-        <SolidBox ref={ref}>hi</SolidBox>
-    </Rnd>
-}
