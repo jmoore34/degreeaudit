@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useState} from "react";
 import styled from "styled-components";
-import cs from '../flowcharts/cs.webp';
+//import cs from '../flowcharts/cs.webp';
 import {Rnd} from "react-rnd";
 
 const FlowchartBackground = styled.img`
