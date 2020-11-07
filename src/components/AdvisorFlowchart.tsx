@@ -14,13 +14,13 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
         setFlowchartElement(flowchartRef.current)
     })
 
-    const [flowchart, setFlowchart]: any = useState([
+    const [flowchart, setFlowchart] = useState<Array<FlowchartBox> >([
         {
             name: "ecs 1100",
-            top: 8.8,
-            left: 35.2,
-            bottom: 88.3,
-            right: 57.5
+            top: 14.7,
+            left: 44.5,
+            width: 7.3,
+            height: 3.3
         }
     ])
 
@@ -31,7 +31,11 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     box={box}
                     flowchart={flowchartElement}
                     onBoxChange={(box: FlowchartBox) => {
-                        const newFlowchart = {...flowchart, box}
+                        console.log("new box")
+                        console.log(box)
+
+                        const newFlowchart = [...flowchart]
+                        newFlowchart[flowchart.findIndex( b => b.name === box.name)] = box
                         setFlowchart(newFlowchart)
                     }}
                 />)}
@@ -55,7 +59,7 @@ const resizeableBoxStyle = {
 const ResizableBox: FunctionComponent<{box: FlowchartBox, onBoxChange: (box: FlowchartBox) => any, flowchart: HTMLElement | null}> = (props) => {
     const rndRef = useRef(null)
     if (props.flowchart == null)
-        return <></>
+        return <h1>aaaaaa</h1>
 
     const flowchart = props.flowchart.getBoundingClientRect()
     const x = props.box.left/100 * flowchart.width
@@ -63,24 +67,25 @@ const ResizableBox: FunctionComponent<{box: FlowchartBox, onBoxChange: (box: Flo
     const width = props.box.width/100 * flowchart.width
     const height = props.box.height/100 * flowchart.height
 
-    const onEvent = () => {
-
-        console.log(rndRef)
-           /* props.onBoxChange({
-                left: 100 * box.left / flowchart.width,
-                top: 100 * box.top / flowchart.height,
-                width: 100 * box.width / flowchart.width,
-                height: 100 * box.height / flowchart.height,
-                name: props.box.name
-            })*/
-
-    }
-
     return <Rnd
         ref={rndRef}
         default={{x, y, width, height}}
         style={resizeableBoxStyle}
-        onDragStop={onEvent}
-        onResizeStop={onEvent}
+        onDragStop={(e, data) => {
+            props.onBoxChange({...props.box,
+                left: data.x / flowchart.width * 100,
+                top: data.y / flowchart.height * 100
+            })
+        }}
+        onResizeStop={(e, dir, refToElement, delta, position) => {
+            const rect = refToElement.getBoundingClientRect()
+            props.onBoxChange({
+                ...props.box,
+                width: 100 * rect.width / flowchart.width,
+                height: 100 * rect.height / flowchart.height,
+                left: 100 * rect.left / flowchart.width,
+                top: 100 * rect.top / flowchart.height
+            })
+        }}
     />
 }
