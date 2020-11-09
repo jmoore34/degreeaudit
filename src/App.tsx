@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from "react";
 import './App.css';
+import { FileUploader } from "./components/uploader";
+import axios from 'axios';
 
-function App() {
+const App = () => {
+  const [name, setName] = useState("");
+  const [selectedFile, setSelectedFile]: any = useState(null);
+
+  const submitForm = () => {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("file", selectedFile)
+
+    axios
+      .post("flowcharts", formData)
+      .then(res => {
+        alert("File Upload Success");
+      })
+      .catch(err => alert("File Upload Error"));
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <FileUploader
+          onFileSelect={(file: any) => setSelectedFile(file)}
+        />
+
+        <button onClick={submitForm}>Submit</button>
+      </form>
     </div>
   );
 }

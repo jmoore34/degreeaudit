@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-        <form action="index.php" method="post">
-            Password: <input type="password" name="pass">
-            <input type="submit">
-        </form>
-        <br>
-        <?php
-            //command in php that writes info to html doc
-            //Use get variable from form to receive input from user
-            echo $_POST["pass"]
-        ?>
+<?php
+$target_dir = "../src/flowcharts";
+$target_file = $target_dir.basename($_FILES["filesToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+//Checks if actual image or fake image.
+if(isset($_POST["submit"])){
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false){
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    }
+    else{
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+}
 
-    </body>
-</html>
+?>
