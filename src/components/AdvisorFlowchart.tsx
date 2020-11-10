@@ -22,7 +22,28 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
 
     return <>
         <FlowchartWrapper ref={flowchartRef}>
-            <FlowchartBackground src={cs} onLoad={() => setFlowchartElement(flowchartRef.current)}/>
+            <FlowchartBackground src={cs}
+                                 onLoad={() => setFlowchartElement(flowchartRef.current)}
+                                 onContextMenu={e => {
+                                    e.preventDefault()
+                                     if (flowchartElement != null) {
+                                         const name = prompt("Enter the class name")
+                                         if (name == null || name.length < 4)
+                                             return
+                                         const flowchartBox = flowchartElement.getBoundingClientRect()
+                                         const width = 7.53
+                                         const height = 3.9
+                                         const newFlowchart = [...flowchart, {
+                                             name,
+                                             width,
+                                             height,
+                                             left: (e.clientX - flowchartBox.left) / flowchartBox.width * 100 - width/2,
+                                             top: (e.clientY - flowchartBox.top) / flowchartBox.height * 100 - height/2
+                                         }]
+                                         console.log(newFlowchart)
+                                         setFlowchart(newFlowchart)
+                                     }
+                                 }}/>
             {flowchart.map((box: FlowchartBox) => <ResizableBox
                     box={box}
                     flowchart={flowchartElement}
