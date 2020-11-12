@@ -4,11 +4,13 @@ import {CourseInfoBox} from "./CourseInfoBox";
 import cs from "../flowcharts/cs.webp";
 import {FlowchartBackground, FlowchartBox, FlowchartWrapper, getColorOfSemester, HighlightBox} from "./Flowchart";
 import {Rnd} from "react-rnd";
+import {useRerenderOnResize} from "../util";
 
 
 export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const flowchartRef = React.useRef(null)
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
+    useRerenderOnResize()
 
     const [flowchart, setFlowchart] = useState<Array<FlowchartBox> >([
         {

@@ -4,6 +4,7 @@ import cs from '../flowcharts/cs.webp';
 import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
+import {useRerenderOnResize} from "../util";
 
 export const FlowchartBackground = styled.img`
     width: 100%;
@@ -39,6 +40,8 @@ export const Flowchart: FunctionComponent<{}> = () => {
     const localStorageKey = "courseSemesters"
     const [courseSemestersMap, setCourseSemesters]: any = useState(JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {});
     const [selectedCourse, setSelectedCourse]: any = useState("");
+
+    useRerenderOnResize()
 
     return <>
         {selectedCourse}
