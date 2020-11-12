@@ -11,10 +11,12 @@ export const DropDownMenu: FunctionComponent<{}> = () => {
         <h1>Please select your major</h1>
 
         <select>
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option selected value="coconut">Coconut</option>
-            <option value="mango">Mango</option>
+            <option value="CS">Computer Science</option>
+            <option value="EE">Electrical Engineering</option>
+            <option selected value="ME">Mechanical Engineering</option>
+            <option value="SE">Software Engineering</option>
+            <option value="BE">Biomedical Engineering</option>
+            <option value="CE">Computer Engineering</option>
         </select>
 
         <div>
