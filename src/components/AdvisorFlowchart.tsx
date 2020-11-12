@@ -6,6 +6,7 @@ import {FlowchartBackground, FlowchartBox, FlowchartWrapper, getColorOfSemester,
 import {Rnd} from "react-rnd";
 import {useRerenderOnResize} from "../util";
 
+const courseNamePrompt = "Enter the class name"
 
 export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const flowchartRef = React.useRef(null)
@@ -20,7 +21,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                                  onContextMenu={e => {
                                     e.preventDefault()
                                      if (flowchartElement != null) {
-                                         const name = prompt("Enter the class name")
+                                         const name = prompt(courseNamePrompt)
                                          if (name == null || name.length < 4)
                                              return
                                          const flowchartBox = flowchartElement.getBoundingClientRect()
@@ -41,11 +42,16 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     box={box}
                     flowchart={flowchartElement}
                     onBoxChange={(box: FlowchartBox) => {
-                        console.log("new box")
-                        console.log(box)
-
                         const newFlowchart = [...flowchart]
                         newFlowchart[flowchart.findIndex( b => b.name === box.name)] = box
+                        console.log(newFlowchart)
+                        setFlowchart(newFlowchart)
+                    }}
+                    onRename={(oldName, newName) => {
+                        let newFlowchart = [...flowchart]
+                        newFlowchart[flowchart.findIndex( b => b.name === oldName)].name = newName
+                        newFlowchart = newFlowchart.filter( b => b.name && b.name.length > 4)
+                        console.log(newFlowchart)
                         setFlowchart(newFlowchart)
                     }}
                 />)}
@@ -55,19 +61,34 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
 
 }
 
-const resizeableBoxStyle = {
+const resizeableBoxStyle = (circle: boolean) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     border: "solid 1px #ddd",
-    backgroundColor: "rgb(217,51,118)",
-    borderRadius: "20%",
-    opacity: 0.3
-};
+    backgroundColor: "rgba(217,51,118,0.3)",
+    borderRadius: circle ? "200%" :  "20%",
+});
 
+const BoxAnnotation = styled.div<{ boxHeight: number }>`
+   margin-top: ${props => props.boxHeight * 1.3}px;
+  font-size: 1vmax;
+  background-color: rgba(255,255,255,0.7);
+  font-weight: bold;
+  position: absolute;
+  color: black;
+  float: left;
+`;
 
-const ResizableBox: FunctionComponent<{box: FlowchartBox, onBoxChange: (box: FlowchartBox) => any, flowchart: HTMLElement | null}> = (props) => {
+interface ResizeableBoxProps {
+    box: FlowchartBox
+    onBoxChange: (box: FlowchartBox) => any
+    onRename: (oldName: string, newName: string) => any
+    flowchart: HTMLElement | null
+}
+const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
     const rndRef = useRef(null)
+
     if (props.flowchart == null || props.flowchart.clientWidth > props.flowchart.clientHeight)
         return null
 
@@ -78,15 +99,14 @@ const ResizableBox: FunctionComponent<{box: FlowchartBox, onBoxChange: (box: Flo
     const height = props.box.height/100 * flowchart.height
     //debugger;
 
-    console.log(props.box)
-    console.log({x, y, width, height})
+    // console.log(props.box)
+    // console.log({x, y, width, height})
 
     return <Rnd
         ref={rndRef}
-        //default={{x, y, width, height}}
         size={{width, height}}
         position={{x, y}}
-        style={resizeableBoxStyle}
+        style={resizeableBoxStyle(props.box.name.includes("core"))}
         onDragStop={(e, data) => {
             props.onBoxChange({...props.box,
                 left: (data.x) / flowchart.width * 100,
@@ -105,5 +125,14 @@ const ResizableBox: FunctionComponent<{box: FlowchartBox, onBoxChange: (box: Flo
             })
             console.log("resized")
         }}
-    />
+        onContextMenu={(e: Event) => {
+            e.preventDefault()
+            const newName = prompt(courseNamePrompt + "\n\n(Leave empty to delete box)")
+            if (newName === null)
+                return
+            props.onRename(props.box.name, newName);
+        }}
+    >
+        <BoxAnnotation boxHeight={height}>{props.box.name}</BoxAnnotation>
+    </Rnd>
 }
