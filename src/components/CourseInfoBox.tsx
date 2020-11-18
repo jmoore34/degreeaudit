@@ -70,9 +70,6 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
 
     return <>
         <InfoBox yVal={props.yValue}>
-            {/*<IFrameWrapper>
-                <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/" height="400" width="600" scrolling="no"></CourseFrame>
-            </IFrameWrapper>*/}
             <IFrameWrapper>
                 <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>

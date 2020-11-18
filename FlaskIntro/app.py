@@ -1,20 +1,21 @@
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
+from pdf2image import convert_from_path
 import os
 
 
 UPLOAD_FOLDER = '../src/flowcharts'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'pdf', 'json'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
 
 
-def allowed_file(filename):
+def has_filetype(filename, filetype):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() == filetype
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -33,10 +34,18 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file and has_filetype(file.filename, "pdf"):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            #print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(UPLOAD_FOLDER + '/' + filename)
+
+            images = convert_from_path(UPLOAD_FOLDER + '/' + filename)
+            for img in images:
+                img.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'jpg')))
+
+            os.remove(UPLOAD_FOLDER + '/' + filename)
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return '''
