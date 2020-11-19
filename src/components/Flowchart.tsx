@@ -5,6 +5,7 @@ import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 import { useRerenderOnResize } from "../util";
+import html2canvas from "html2canvas";
 
 export const FlowchartBackground = styled.img`
     width: 100%;
@@ -24,7 +25,7 @@ export const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     cursor: pointer;
     background-color: ${props => Color(props.color).lighten(.1).fade(.5).toString()};
     position: absolute;
-    border-radius: 20%;
+    border-radius: ${props => props.box.name.toLowerCase().includes("core") ? "200%" : "20%"};
     z-index: 2;
 `;
 
@@ -44,8 +45,32 @@ export const Flowchart: FunctionComponent<{}> = () => {
     useRerenderOnResize()
 
     return <>
+        <div>
+            <h1>Please color your classes according to which semester you plan on taking them</h1>
+
+            <button onClick={() => {
+
+                const exportPage = document.getElementsByClassName("exportImage");
+
+                console.log(exportPage)
+
+                if (exportPage) {
+                    html2canvas(exportPage[0] as HTMLElement).then(canvas => {
+                        //document.body.appendChild(canvas)
+                        var link = document.createElement("a");
+                        document.body.appendChild(link);
+                        link.download = "html_image.png";
+                        link.href = canvas.toDataURL("image/png");
+                        link.target = '_blank';
+                        link.click();
+                    });
+                }
+
+            }}>Export PDF as Image</button>
+        </div>
+
         {selectedCourse}
-        <FlowchartWrapper ref={ref}>
+        <FlowchartWrapper className='exportImage' ref={ref}>
             <CourseInfoBox yValue={(flowchartBoxes.find(box => box.name === selectedCourse))?.top}
                 course={selectedCourse}
                 semester={courseSemestersMap[selectedCourse]}
