@@ -55,6 +55,9 @@ export const Flowchart: FunctionComponent<{}> = () => {
                     console.log(localStorage.getItem(localStorageKey));
                     setCourseSemesters(newMap);
                 }}
+                onClose={() => {
+                    setSelectedCourse('');
+                }}
             />
             <FlowchartBackground src={cs} />
             {flowchartBoxes.map(box =>

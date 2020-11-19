@@ -61,7 +61,7 @@ const SiblingDiv = styled.div <{}>`
     height: 390px;
 `
 
-export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string }> = (props) => {
+export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void }> = (props) => {
     //const [semester, setSemester] = useState("");
 
     if (!props.course) {
@@ -70,6 +70,12 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
 
     return <>
         <InfoBox yVal={props.yValue}>
+            <button
+                onClick={() => {
+                    props.onClose();
+                }}>
+                Close
+            </button>
             <IFrameWrapper>
                 <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>
