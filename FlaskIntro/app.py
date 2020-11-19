@@ -46,8 +46,8 @@ def upload_file():
                     app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'jpg')))
 
             os.remove(UPLOAD_FOLDER + '/' + filename)
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            return "ok"
+
     return '''
     <!doctype html>
     <title>Upload new File</title>

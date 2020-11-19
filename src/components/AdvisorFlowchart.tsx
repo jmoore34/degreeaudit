@@ -89,36 +89,15 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
         </Row>
         <FlowchartWrapper ref={flowchartRef}>
             <FlowchartBackground src={cs}
-                                 onLoad={() => setFlowchartElement(flowchartRef.current)}
-                                 onContextMenu={e => {
-                                    e.preventDefault()
-                                     if (flowchartElement != null) {
-                                         let name = prompt(courseNamePrompt)
-                                         if (name == null || name.length < 4)
-                                             return
-                                         const existingNames = flowchart.map( box => box.name )
-                                         name = ensureNameUnique(name, existingNames)
-                                         const flowchartBox = flowchartElement.getBoundingClientRect()
-                                         const width = 7.53
-                                         const height = 3.9
-                                         const newFlowchart = [...flowchart, {
-                                             name,
-                                             width,
-                                             height,
-                                             left: (e.clientX - flowchartBox.left) / flowchartBox.width * 100 - width/2,
-                                             top: (e.clientY - flowchartBox.top) / flowchartBox.height * 100 - height/2
-                                         }]
-                                         console.log(newFlowchart)
-                                         setFlowchart(newFlowchart)
-                                     }
-                                 }}/>
                 onLoad={() => setFlowchartElement(flowchartRef.current)}
-                onContextMenu={(e: any) => {
+                onContextMenu={e => {
                     e.preventDefault()
                     if (flowchartElement != null) {
-                        const name = prompt(courseNamePrompt)
+                        let name = prompt(courseNamePrompt)
                         if (name == null || name.length < 4)
                             return
+                        const existingNames = flowchart.map(box => box.name)
+                        name = ensureNameUnique(name, existingNames)
                         const flowchartBox = flowchartElement.getBoundingClientRect()
                         const width = 7.53
                         const height = 3.9
@@ -134,24 +113,23 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     }
                 }} />
             {flowchart.map((box: FlowchartBox) => <ResizableBox
-                    box={box}
-                    flowchart={flowchartElement}
-                    onBoxChange={(box: FlowchartBox) => {
-                        const newFlowchart = [...flowchart]
-                        newFlowchart[flowchart.findIndex( b => b.name === box.name)] = box
-                        console.log(newFlowchart)
-                        setFlowchart(newFlowchart)
-                    }}
-                    onRename={(oldName, newName) => {
-                        const existingNames = flowchart.map( box => box.name )
-                        newName = ensureNameUnique(newName, existingNames)
-                        let newFlowchart = [...flowchart]
-                        newFlowchart[flowchart.findIndex( b => b.name === oldName)].name = newName
-                        newFlowchart = newFlowchart.filter( b => b.name && b.name.length > 4)
-                        console.log(newFlowchart)
-                        setFlowchart(newFlowchart)
-                    }}
-                />)}
+                box={box}
+                flowchart={flowchartElement}
+                onBoxChange={(box: FlowchartBox) => {
+                    const newFlowchart = [...flowchart]
+                    newFlowchart[flowchart.findIndex(b => b.name === box.name)] = box
+                    console.log(newFlowchart)
+                    setFlowchart(newFlowchart)
+                }}
+                onRename={(oldName, newName) => {
+                    const existingNames = flowchart.map(box => box.name)
+                    newName = ensureNameUnique(newName, existingNames)
+                    let newFlowchart = [...flowchart]
+                    newFlowchart[flowchart.findIndex(b => b.name === oldName)].name = newName
+                    newFlowchart = newFlowchart.filter(b => b.name && b.name.length > 4)
+                    console.log(newFlowchart)
+                    setFlowchart(newFlowchart)
+                }}
             />)}
         </FlowchartWrapper>
     </>
