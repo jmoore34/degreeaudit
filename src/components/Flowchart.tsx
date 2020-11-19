@@ -5,6 +5,7 @@ import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 import {useRerenderOnResize} from "../util";
+import html2canvas from "html2canvas";
 
 export const FlowchartBackground = styled.img`
     width: 100%;
@@ -35,6 +36,8 @@ export const FlowchartWrapper = styled.div`
     position: relative;
 `;
 
+// Button must download to local storage 
+
 export const Flowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
     const localStorageKey = "courseSemesters"
@@ -42,10 +45,29 @@ export const Flowchart: FunctionComponent<{}> = () => {
     const [selectedCourse, setSelectedCourse]: any = useState("");
 
     useRerenderOnResize()
-
+    
     return <>
+        <div>
+        <h1>Please color your classes according to which semester you plan on taking them</h1>
+        
+        <button onClick={() => {
+
+            const exportPage = document.getElementsByClassName("exportImage");
+
+            console.log(exportPage)
+
+            if(exportPage)
+            {
+                html2canvas(exportPage[0] as HTMLElement).then(canvas => {
+                    document.body.appendChild(canvas)
+                });
+            }
+            
+        }}>Export PDF as Image</button>
+        </div>
+
         {selectedCourse}
-        <FlowchartWrapper ref={ref}>
+        <FlowchartWrapper className='exportImage' ref={ref}>
             <CourseInfoBox yValue={(flowchartBoxes.find(box => box.name === selectedCourse))?.top}
                 course={selectedCourse}
                 semester={courseSemestersMap[selectedCourse]}
