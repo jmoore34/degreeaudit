@@ -2,11 +2,14 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from pdf2image import convert_from_path
+from pathlib import Path
+from os import path
 import os
 
 
 UPLOAD_FOLDER = '../src/flowcharts'
 ALLOWED_EXTENSIONS = {'pdf', 'json'}
+JSON_FOLDER = Path('../src/json')
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -18,7 +21,7 @@ def has_filetype(filename, filetype):
            filename.rsplit('.', 1)[1].lower() == filetype
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/api/pdf', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if request.form["password"] != "password":
@@ -48,16 +51,22 @@ def upload_file():
             os.remove(UPLOAD_FOLDER + '/' + filename)
             return "ok"
 
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-      <input type=password name=password>
-    </form>
-    '''
+
+@app.route('/api/json', methods=['GET', 'POST'])
+def pixelInfo():
+    filePath = JSON_FOLDER/request.form["name"]
+    if request.method == 'POST':
+        if request.form["password"] != "password":
+            return "Error"
+        with open(filePath, 'w') as f:
+            f.write(request.form["body"])
+            return "ok"
+    if request.method == 'GET':
+        if(not path.exists(filePath)):
+            return "[]"
+        else:
+            with open(filePath, 'r') as f:
+                return f.read()
 
 
 @app.route('/uploads/<filename>')
