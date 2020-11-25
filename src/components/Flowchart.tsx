@@ -25,7 +25,7 @@ export const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     cursor: pointer;
     background-color: ${props => Color(props.color).lighten(.1).fade(.5).toString()};
     position: absolute;
-    border-radius: ${props => props.box.name.toLowerCase().includes("core") ? "200%" : "20%"};
+    border-radius: ${props => props.box.name.toLowerCase().includes("core") ? "200%" : "17.5%"};
     z-index: 2;
 `;
 

@@ -80,7 +80,7 @@ const resizeableBoxStyle = (circle: boolean) => ({
     justifyContent: "center",
     border: "solid 1px #ddd",
     backgroundColor: "rgba(217,51,118,0.3)",
-    borderRadius: circle ? "200%" :  "20%",
+    borderRadius: circle ? "200%" :  "17.5%",
 });
 
 const BoxAnnotation = styled.div<{ boxHeight: number }>`
@@ -146,6 +146,6 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
             props.onRename(props.box.name, newName);
         }}
     >
-        <BoxAnnotation boxHeight={height}>{props.box.name.replace(CHAR_TO_APPEND_TO_NAMES, "")}</BoxAnnotation>
+        <BoxAnnotation boxHeight={height}>{props.box.name.replace(/'/g, "")}</BoxAnnotation>
     </Rnd>
 }

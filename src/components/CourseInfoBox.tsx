@@ -74,7 +74,7 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
                 <CourseFrame src="https://catalog.utdallas.edu/2020/undergraduate/courses/" height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>*/}
             <IFrameWrapper>
-                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(" ", "")} height="400" width="600" scrolling="no"></CourseFrame>
+                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>
             <ButtonContainer>
                 {["Previous Semesters", "Current Semester", "Spring 21", "Sum. 21", "Fall 21", "Spring 22", "Sum. 22", "Fall 22", "Spring 23", "Sum. 23", "Fall 23",
