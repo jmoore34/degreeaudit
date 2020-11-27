@@ -26,6 +26,9 @@ const years: any = [
     { value: '2020', label: '2020' },
 ];
 
+const defaultMajor = major[0]
+const defaultYear = years[0]
+
 // Given a name, returns a modified version of the name that is sure to be unique
 const CHAR_TO_APPEND_TO_NAMES = "'"
 function ensureNameUnique(name: string, existingNames: Array<string>) {
@@ -38,23 +41,44 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const flowchartRef = React.useRef(null)
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
     useRerenderOnResize()
-    const [flowchart, setFlowchart] = useState<Array<FlowchartBox>>([])
-    const [selectedMajor, setSelectedMajor] = useState<{ value: string, label: string } | null>(null)
-    const [selectedYear, setSelectedYear] = useState<{ value: string, label: string } | null>(null)
+
+    const [selectedMajor, setSelectedMajor] = useState<{ value: string, label: string }>(defaultMajor)
+    const [selectedYear, setSelectedYear] = useState<{ value: string, label: string }>(defaultYear)
+
+    const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
+
+    // __setFlowchart updates the local state only and should not be called directly
+    // Instead, flowchart updates should call updateFlowchart(), which both updates the local
+    // state by calling __setFlowchart as well as sends the changes to the server
+    const [flowchart, __setFlowchart] = useState<Array<FlowchartBox>>([])
+
+    async function updateFlowchart(newFlowchart: any) {
+        var formData = new FormData();
+        formData.append("filename", selectedFlowchart + ".json");
+        formData.append("body", JSON.stringify(newFlowchart));
+        formData.append("password", "password");
+        axios.post('http://127.0.0.1:5000/api/json', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        __setFlowchart(newFlowchart)
+    }
+
     return <>
         <Row>
             <Column>
                 <h2>Choose which flowchart to use</h2>
                 <Row>
                     <StyledSelect
-                        defaultValue={{ value: 'CS', label: 'Computer Science' }}
+                        defaultValue={defaultMajor}
                         onChange={(newVal: any) => {
                             setSelectedMajor(newVal)
                         }}
                         options={major}
                     />
                     <StyledSelect
-                        defaultValue={{ value: new Date().getFullYear(), label: new Date().getFullYear() }}
+                        defaultValue={defaultYear}
                         onChange={(newVal: any) => {
                             setSelectedYear(newVal)
                         }}
@@ -109,7 +133,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                             top: (e.clientY - flowchartBox.top) / flowchartBox.height * 100 - height / 2
                         }]
                         console.log(newFlowchart)
-                        setFlowchart(newFlowchart)
+                        updateFlowchart(newFlowchart)
                     }
                 }} />
             {flowchart.map((box: FlowchartBox) => <ResizableBox
@@ -119,7 +143,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     const newFlowchart = [...flowchart]
                     newFlowchart[flowchart.findIndex(b => b.name === box.name)] = box
                     console.log(newFlowchart)
-                    setFlowchart(newFlowchart)
+                    updateFlowchart(newFlowchart)
                 }}
                 onRename={(oldName, newName) => {
                     const existingNames = flowchart.map(box => box.name)
@@ -128,7 +152,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     newFlowchart[flowchart.findIndex(b => b.name === oldName)].name = newName
                     newFlowchart = newFlowchart.filter(b => b.name && b.name.length > 4)
                     console.log(newFlowchart)
-                    setFlowchart(newFlowchart)
+                    updateFlowchart(newFlowchart)
                 }}
             />)}
         </FlowchartWrapper>
