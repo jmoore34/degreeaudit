@@ -4,6 +4,7 @@ from flask import send_from_directory
 from pdf2image import convert_from_path
 from pathlib import Path
 from os import path
+from flask_cors import CORS, cross_origin
 import os
 
 
@@ -12,6 +13,8 @@ ALLOWED_EXTENSIONS = {'pdf', 'json'}
 JSON_FOLDER = Path('../src/json')
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
 
@@ -22,6 +25,7 @@ def has_filetype(filename, filetype):
 
 
 @app.route('/api/pdf', methods=['GET', 'POST'])
+@cross_origin()
 def upload_file():
     if request.method == 'POST':
         if request.form["password"] != "password":
@@ -46,7 +50,7 @@ def upload_file():
             images = convert_from_path(UPLOAD_FOLDER + '/' + filename)
             for img in images:
                 img.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'jpg')))
+                    app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'png')))
 
             os.remove(UPLOAD_FOLDER + '/' + filename)
             return "ok"
@@ -69,7 +73,8 @@ def pixelInfo():
                 return f.read()
 
 
-@app.route('/uploads/<filename>')
+@app.route('/api/img/<filename>', methods=['GET'])
+@cross_origin()
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
