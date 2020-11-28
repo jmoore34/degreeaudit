@@ -36,8 +36,6 @@ export const FlowchartWrapper = styled.div`
     position: relative;
 `;
 
-// Button must download to local storage 
-
 export const Flowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
     const localStorageKey = "courseSemesters"
@@ -81,6 +79,9 @@ export const Flowchart: FunctionComponent<{}> = () => {
                     localStorage.setItem(localStorageKey, JSON.stringify(newMap));
                     console.log(localStorage.getItem(localStorageKey));
                     setCourseSemesters(newMap);
+                }}
+                onClose={() => {
+                    setSelectedCourse('');
                 }}
             />
             <FlowchartBackground src={cs} />
