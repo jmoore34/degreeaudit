@@ -18,16 +18,20 @@ const major: any = [
     { value: 'SE', label: 'Software Engineering' },
 ];
 
+
+
 const years: any = [
-    { value: '2016', label: '2016' },
-    { value: '2017', label: '2017' },
-    { value: '2018', label: '2018' },
-    { value: '2019', label: '2019' },
-    { value: '2020', label: '2020' },
+
 ];
+
+
+for (let i = new Date().getFullYear(); i >= 2016; i--) {
+    years.push({ value: i, label: i })
+}
 
 const defaultMajor = major[0]
 const defaultYear = years[0]
+
 
 // Given a name, returns a modified version of the name that is sure to be unique
 const CHAR_TO_APPEND_TO_NAMES = "'"
