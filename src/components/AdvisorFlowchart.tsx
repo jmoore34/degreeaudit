@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { CourseInfoBox } from "./CourseInfoBox";
-import cs from "../flowcharts/cs.webp";
+//import cs from "../flowcharts/cs.webp";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, getColorOfSemester, HighlightBox } from "./Flowchart";
 import { Rnd } from "react-rnd";
 import { useRerenderOnResize } from "../util";
@@ -14,17 +14,11 @@ const major: any = [
     { value: 'CE', label: 'Computer Engineering' },
     { value: 'CS', label: 'Computer Science' },
     { value: 'EE', label: 'Electrical Engineering' },
-    { value: 'ME', label: 'Mechancial Engineering' },
+    { value: 'MECH', label: 'Mechancial Engineering' },
     { value: 'SE', label: 'Software Engineering' },
 ];
 
-
-
-const years: any = [
-
-];
-
-
+var years: any = [];
 for (let i = new Date().getFullYear(); i >= 2016; i--) {
     years.push({ value: i, label: i })
 }
@@ -46,8 +40,8 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
     useRerenderOnResize()
 
-    const [selectedMajor, setSelectedMajor] = useState<{ value: string, label: string }>(defaultMajor)
-    const [selectedYear, setSelectedYear] = useState<{ value: string, label: string }>(defaultYear)
+    const [selectedMajor, setSelectedMajor] = useState<{ value: string, label: string } | null>(defaultMajor)
+    const [selectedYear, setSelectedYear] = useState<{ value: string, label: string } | null>(defaultYear)
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
@@ -75,13 +69,14 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             params: {
                 "filename": selectedFlowchart + ".json"
             }
-        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err.response))
+        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err + " " + err.response.msg))
         //sdfd
 
     }, [selectedFlowchart])
 
 
     return <>
+        <h2>{selectedFlowchart}</h2>
         <Row>
             <Column>
                 <h2>Choose which flowchart to use</h2>
@@ -109,16 +104,23 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     <input
                         type='file'
                         name='upload'
-                        onChange={e => {
-                            debugger;
+                        onChange={async (e) => {
                             if (e.target.files && e.target.files[0]) {
                                 var formData = new FormData();
                                 formData.append("file", e.target.files[0]);
                                 formData.append("password", "password");
-                                axios.post('http://127.0.0.1:5000/api/pdf', formData, {
+                                const response = axios.post('http://127.0.0.1:5000/api/pdf', formData, {
                                     headers: {
                                         'Content-Type': 'multipart/form-data'
                                     }
+                                }).then(() => {
+                                    console.log("Then");
+                                    const year = selectedYear;
+                                    setSelectedYear(null);
+                                    setSelectedYear(year);
+                                }).catch((error) => {
+                                    console.log(error);
+                                    alert(error + " " + error.response.msg);
                                 })
                             }
                         }}
@@ -128,7 +130,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             </Column>
         </Row>
         <FlowchartWrapper ref={flowchartRef}>
-            <FlowchartBackground src={cs}
+            <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png"}
                 onLoad={() => setFlowchartElement(flowchartRef.current)}
                 onContextMenu={e => {
                     e.preventDefault()
