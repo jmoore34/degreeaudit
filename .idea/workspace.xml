@@ -21,16 +21,16 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/uploadAPI" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="857c1ea1-d72f-423b-a436-ba2f97d0aef5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlaskIntro/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Flowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Flowchart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/json/CS2020.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,9 +57,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="ts.external.directory.path" value="C:\Users\1570s\Documents\Personal_Coding\Senior Design Project\degreeaudit\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\jon\WebstormProjects\degreeaudit\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -71,6 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1603768025502</updated>
       <workItem from="1603768035279" duration="97000" />
+      <workItem from="1606514265864" duration="4901000" />
     </task>
     <servers />
   </component>
@@ -88,7 +91,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="origin/uploadAPI" />
                       </list>
                     </value>
                   </entry>
@@ -101,6 +104,11 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Display fixes&#10;&#10;Border radius fix&#10;Course name uniquifier fix" />
+    <MESSAGE value="Update default CS pixel data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update default CS pixel data" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="-117" y="0" width="2567" height="1369" key="MergeDialog" timestamp="1605814069447">
       <screen x="0" y="0" width="2560" height="1400" />
@@ -110,5 +118,9 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="918" y="461" key="MultipleFileMergeDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1605814086753" />
+    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1606516051049">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1606516051049" />
   </component>
 </project>

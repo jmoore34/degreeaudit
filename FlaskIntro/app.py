@@ -54,7 +54,7 @@ def upload_file():
 
 @app.route('/api/json', methods=['GET', 'POST'])
 def pixelInfo():
-    filePath = JSON_FOLDER/request.form["name"]
+    filePath = JSON_FOLDER/request.form["filename"]
     if request.method == 'POST':
         if request.form["password"] != "password":
             return "Error"
