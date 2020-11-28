@@ -1,4 +1,5 @@
 from flask import Flask, flash, request, redirect, url_for
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from pdf2image import convert_from_path
@@ -15,6 +16,8 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
 
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def has_filetype(filename, filetype):
     return '.' in filename and \
@@ -51,17 +54,19 @@ def upload_file():
             os.remove(UPLOAD_FOLDER + '/' + filename)
             return "ok"
 
-
+@cross_origin
 @app.route('/api/json', methods=['GET', 'POST'])
 def pixelInfo():
-    filePath = JSON_FOLDER/request.form["filename"]
     if request.method == 'POST':
+        filePath = JSON_FOLDER/request.form["filename"]
         if request.form["password"] != "password":
             return "Error"
         with open(filePath, 'w') as f:
             f.write(request.form["body"])
             return "ok"
     if request.method == 'GET':
+        # https://stackoverflow.com/questions/11774265/how-do-you-get-a-query-string-on-flask
+        filePath = JSON_FOLDER/request.args.get("filename")
         if(not path.exists(filePath)):
             return "[]"
         else:

@@ -65,6 +65,18 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
         __setFlowchart(newFlowchart)
     }
 
+    useEffect(() => {
+        axios.get('http://127.0.0.1:5000/api/json', {
+            // https://masteringjs.io/tutorials/axios/get-query-params
+            params: {
+                "filename": selectedFlowchart + ".json"
+            }
+        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err.response))
+        //sdfd
+
+    }, [selectedFlowchart])
+
+
     return <>
         <Row>
             <Column>
