@@ -4,7 +4,7 @@ import cs from '../flowcharts/cs.webp';
 import { Rnd } from "react-rnd";
 import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
-import { useRerenderOnResize } from "../util";
+import {renameSemester, useRerenderOnResize} from "../util";
 import html2canvas from "html2canvas";
 
 export const FlowchartBackground = styled.img`
@@ -36,10 +36,19 @@ export const FlowchartWrapper = styled.div`
     position: relative;
 `;
 
+const localStorageKey = "courseSemesters"
+// load the student's course->semester mappings from localStorage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
+// defaulting to an empty map
+const initialSemesterMap = JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {}
+// postprocess this map to rename past semesters (e.g. "Fall 2015") to "Previous Semesters"
+let postprocessedInitialSemesterMap: any = {};
+for (const [course, semester] of Object.entries(initialSemesterMap)) {
+    postprocessedInitialSemesterMap[course] = renameSemester(semester as string)
+}
+
 export const Flowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
-    const localStorageKey = "courseSemesters"
-    const [courseSemestersMap, setCourseSemesters]: any = useState(JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {});
+    const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
     const [selectedCourse, setSelectedCourse]: any = useState("");
 
     useRerenderOnResize()
