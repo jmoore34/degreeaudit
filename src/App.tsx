@@ -6,7 +6,7 @@ import { Flowchart } from "./components/Flowchart";
 function App() {
   return (
     <div className="App">
-      <AdvisorFlowchart />
+      <Flowchart />
     </div>
   );
 }

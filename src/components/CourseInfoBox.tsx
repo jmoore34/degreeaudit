@@ -20,8 +20,8 @@ const InfoBox = styled.div <{ yVal: string }>`
 `;
 
 const SemesterButton = styled.div <{ color: string, selected: boolean, doubleWidth: boolean }>`
-    background-color: ${props => props.selected ? Color(props.color).lighten(.3).toString() : Color(props.color).lighten(.96).toString()};
-    border: 2px solid ${props => props.selected ? Color(props.color).lighten(.1).toString() : Color(props.color).lighten(.36).toString()};
+    background-color: ${props => props.selected ? Color(props.color).lighten(.2).toString() : Color(props.color).lightness(98).toString()};
+    border: 2px solid ${props => props.selected ? Color(props.color).lighten(.1).toString() : Color(props.color).lighten(.15).toString()};
     transition: all .15s;
     font-weight: ${props => props.selected ? "bold" : "normal"};
     box-shadow: ${props => props.selected ? "6px 6px 6px 1px lightgray" : "4px 4px 4px 1px lightgray"};
