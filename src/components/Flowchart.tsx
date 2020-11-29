@@ -85,8 +85,9 @@ export const Flowchart: FunctionComponent<{}> = () => {
                 semester={courseSemestersMap[selectedCourse]}
                 onSemesterChanged={(newSemester: string) => {
                     const newMap = { ...courseSemestersMap, [selectedCourse]: newSemester }
+                    //Local Storage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
                     localStorage.setItem(localStorageKey, JSON.stringify(newMap));
-                    console.log(localStorage.getItem(localStorageKey));
+                    //console.log(localStorage.getItem(localStorageKey));
                     setCourseSemesters(newMap);
                 }}
                 onClose={() => {
@@ -110,22 +111,49 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
 }
 
+//Array of colors that the courseinfobox buttons will cycle through
+const colors = ["#CC0058", "#3DFFA5", "#FA5700", "#3D77FF", "#9900FF", "#00DB9A", "#FF00B3", "#E3FF42", "#0065A2", "#00DB9A", "#FF2E2E", "#FFBE0A"]
+
+/*Function that determines which semester is given to which color in the array above. The colors will repeat every four years
+ * e.g. Spring 2021 starts as the first color. The color will be reused when Spring 2025 is generated. 
+*/
 export function getColorOfSemester(semester: string) {
-    if (!semester) {
+
+    //Default
+    if (!semester || semester === "") {
         return "transparent";
     }
-    const hue = TSH(semester) % 360;
-    if (semester === "Previous Semesters")
+
+    else if (semester === "Previous Semesters")
         return "gray";
-    else
-        return `hsl(${hue}, 100%, 50%)`;
 
-}
+    else {
+        //Gets semester year e.g. "Spring 24" = 24
+        let num = parseInt(semester.substring(semester.length - 2))
 
-function TSH(s: string) {
-    for (var i = 0, h = 9; i < s.length;)
-        h = Math.imul(h ^ s.charCodeAt(i++), 9 ** 9);
-    return h ^ h >>> 9
+        //Subtract 1 so that the starting year (2021 -> 21)%4 = 0
+        num -= 1;
+        //Makes colors repeat every four years
+        num %= 4;
+        //but we want different indexes/colors for spring, summer and fall. So we triple the size of the array and then add 0,1,2 to indicate spring/summer/fall
+        num *= 3;
+
+
+        if (semester.toLowerCase().includes("sp")) {
+            //"adds 0" to index for spring
+        }
+        else if (semester.toLowerCase().includes("su")) {
+            //adds 1 to index for summer
+            num += 1;
+        }
+        else if (semester.toLowerCase().includes("fa")) {
+            //adds 2 to index for fall
+            num += 2;
+        }
+
+        return colors[num];
+    }
+
 }
 
 
