@@ -112,7 +112,7 @@ export const Flowchart: FunctionComponent<{}> = () => {
 }
 
 //Array of colors that the courseinfobox buttons will cycle through
-const colors = ["#CC0058", "#3DFFA5", "#FA5700", "#3D77FF", "#9900FF", "#00DB9A", "#FF00B3", "#E3FF42", "#0065A2", "#00DB9A", "#FF2E2E", "#FFBE0A"]
+const colors = ["#cc0058", "#3dffa5", "#fa5700", "#3D77FF", "#9900FF", "#00DB9A", "#E3FF42", "#FF00B3", "#0065A2", "#00DB9A", "#FF2E2E", "#FFBE0A"]
 
 /*Function that determines which semester is given to which color in the array above. The colors will repeat every four years
  * e.g. Spring 2021 starts as the first color. The color will be reused when Spring 2025 is generated. 
