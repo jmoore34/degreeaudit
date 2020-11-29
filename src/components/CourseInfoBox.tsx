@@ -61,12 +61,51 @@ const SiblingDiv = styled.div <{}>`
     height: 390px;
 `
 
+const now = new Date()
+var currentTerm: string;
+// (note: now.getMonth() is 0-indexed
+// note: this isn't exact, but it's good enough to not show very old semesters in the list of buttons
+if (now.getMonth() <= 4) currentTerm = 'Spring' // Jan through May
+else if (now.getMonth() <= 7) currentTerm = 'Summer' // June through August
+else currentTerm = 'Fall' // September through December
+
+const currentAbbreviatedYear = now.getFullYear() % 100 // e.g. 2020 -> 20
+
+export const currentSemester = `${currentTerm} ${currentAbbreviatedYear}`
+
+function getNextSemester(currentSemester: string) {
+    let newTerm;
+    if (currentSemester.includes("Spring")) newTerm = "Summer"
+    else if (currentSemester.includes("Summer")) newTerm = "Fall"
+    else newTerm = "Spring"
+
+    const oldYear = Number(currentSemester.substring(currentSemester.length - 2)) // last two characters are the shortened year (e.g. 2020 -> 20)
+
+    const newYear = (newTerm === "Spring") ? oldYear + 1 : oldYear; // year stays the same, except after a fall semester (spring is in new year)
+
+    return `${newTerm} ${newYear}`
+}
+
+// Generator function (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)
+// to generate 12 semesters starting with the current one
+function* semesterGenerator() {
+    let semester = currentSemester
+    for (let i=0; i<12; i++) {
+        yield semester
+        semester = getNextSemester(semester)
+    }
+}
+
+
 export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void }> = (props) => {
     //const [semester, setSemester] = useState("");
 
     if (!props.course) {
         return <></>
     }
+
+    // @ts-ignore
+    const semesters = ["Previous Semesters", ...semesterGenerator()]
 
     return <>
         <InfoBox yVal={props.yValue}>
@@ -80,12 +119,20 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
                 <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>
             <ButtonContainer>
-                {["Previous Semesters", "Current Semester", "Spring 21", "Sum. 21", "Fall 21", "Spring 22", "Sum. 22", "Fall 22", "Spring 23", "Sum. 23", "Fall 23",
-                    "Spring 24", "Sum. 24", "Fall 24"].map((sem, index, arr) =>
+                <SemesterButton
+                    color="#b5b3b0"
+                    selected={!props.semester}
+                    doubleWidth={true}
+                    onClick={() => {
+                        props.onSemesterChanged("");
+                    }}>
+                    Unset
+                </SemesterButton>
+                {semesters.map((sem, index, arr) =>
                         <SemesterButton
                             color={getColorOfSemester(sem)}
                             selected={props.semester === sem}
-                            doubleWidth={sem.includes("Sem") ? true : false}
+                            doubleWidth={sem.includes("Sem") ? true : false} // "Previous Semesters" should be double witdth
                             onClick={() => {
                                 props.onSemesterChanged(sem);
                             }}>
