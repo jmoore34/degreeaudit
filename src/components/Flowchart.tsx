@@ -36,6 +36,17 @@ export const FlowchartWrapper = styled.div`
     position: relative;
 `;
 
+const BoxAnnotation = styled.div<{ boxHeight: number, semester: string }>`
+  transform: scale(.8) ${props => (props.semester != null && /(fa)|(su)|(sp)/gi.test(props.semester)) ? "translate(0, 300%)" : "translate(0, 100%)"};
+  margin-left: ${props => (props.semester != null && (props.semester.toLowerCase().includes("fa"))) ? 20 : 0}px;
+  font-size: 1vmax;
+  background-color: rgba(255,255,255,0.7);
+  font-weight: bold;
+  position: absolute;
+  color: black;
+  float: left;
+`;
+
 export const Flowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
     const localStorageKey = "courseSemesters"
@@ -93,7 +104,7 @@ export const Flowchart: FunctionComponent<{}> = () => {
                         setSelectedCourse(box.name);
                     }}
                 >
-
+                    <BoxAnnotation boxHeight={50} semester={courseSemestersMap[box.name]}>{courseSemestersMap[box.name]}</BoxAnnotation>
                 </HighlightBox>
             )}
         </FlowchartWrapper>
