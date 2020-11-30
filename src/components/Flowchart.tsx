@@ -6,6 +6,7 @@ import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 import {renameSemester, useRerenderOnResize} from "../util";
 import html2canvas from "html2canvas";
+import {BoxAnnotation} from "./AdvisorFlowchart";
 
 export const FlowchartBackground = styled.img`
     width: 100%;
@@ -27,6 +28,13 @@ export const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     position: absolute;
     border-radius: ${props => props.box.name.toLowerCase().includes("core") ? "200%" : "17.5%"};
     z-index: 2;
+    + ${BoxAnnotation} {
+      top: ${props => props.box.top + props.box.height}%;
+      left: ${props => props.box.left}%;
+      width: ${props => props.box.width}%;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
 `;
 
 export const FlowchartWrapper = styled.div`
@@ -40,7 +48,7 @@ const localStorageKey = "courseSemesters"
 // load the student's course->semester mappings from localStorage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
 // defaulting to an empty map
 const initialSemesterMap = JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {}
-// postprocess this map to rename past semesters (e.g. "Fall 2015") to "Previous Semesters"
+// postprocess this map to rename past semesters (e.g. "Fall 2015") to "Taken"
 let postprocessedInitialSemesterMap: any = {};
 for (const [course, semester] of Object.entries(initialSemesterMap)) {
     postprocessedInitialSemesterMap[course] = renameSemester(semester as string)
@@ -64,15 +72,18 @@ export const Flowchart: FunctionComponent<{}> = () => {
                 console.log(exportPage)
 
                 if (exportPage) {
-                    html2canvas(exportPage[0] as HTMLElement).then(canvas => {
-                        //document.body.appendChild(canvas)
-                        var link = document.createElement("a");
-                        document.body.appendChild(link);
-                        link.download = "html_image.png";
-                        link.href = canvas.toDataURL("image/png");
-                        link.target = '_blank';
-                        link.click();
-                    });
+                    setSelectedCourse(null); // so that the CourseInfoBox is hidden
+                    setTimeout(() => {
+                        html2canvas(exportPage[0] as HTMLElement).then(canvas => {
+                            //document.body.appendChild(canvas)
+                            var link = document.createElement("a");
+                            document.body.appendChild(link);
+                            link.download = "html_image.png";
+                            link.href = canvas.toDataURL("image/png");
+                            link.target = '_blank';
+                            link.click();
+                        });
+                    }, 50); // hack: give the page a change to rerender before taking the screenshot
                 }
 
             }}>Export PDF as Image</button>
@@ -95,15 +106,17 @@ export const Flowchart: FunctionComponent<{}> = () => {
                 }}
             />
             <FlowchartBackground src={cs} />
-            {flowchartBoxes.map(box =>
-                <HighlightBox box={box}
-                    color={getColorOfSemester(courseSemestersMap[box.name])}
-                    onClick={() => {
-                        setSelectedCourse(box.name);
-                    }}
-                >
+            {flowchartBoxes.map(box => <>
+                    <HighlightBox box={box}
+                        color={getColorOfSemester(courseSemestersMap[box.name])}
+                        onClick={() => {
+                            setSelectedCourse(box.name);
+                        }}
+                    >
 
-                </HighlightBox>
+                    </HighlightBox>
+                    <BoxAnnotation boxHeight={0}>{courseSemestersMap[box.name]}</BoxAnnotation>
+                </>
             )}
         </FlowchartWrapper>
     </>
@@ -124,7 +137,7 @@ export function getColorOfSemester(semester: string) {
         return "transparent";
     }
 
-    else if (semester === "Previous Semesters")
+    else if (semester === "Taken")
         return "gray";
 
     else {

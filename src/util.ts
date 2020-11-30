@@ -12,12 +12,12 @@ export function useRerenderOnResize() {
     }, [])
 }
 
-// Given a semester, rename it to "Previous Semesters" if it is in the past; else return the original name
+// Given a semester, rename it to "Taken" if it is in the past; else return the original name
 export function renameSemester(semester: string): string {
     const now = new Date()
     const currentAbbreviatedYear = now.getFullYear() % 100 // e.g. 2020 -> 20
     const semesterAbbreviatedYear = Number(semester.substring(semester.length - 2)) // e.g. Fall 20 -> 20
-    // if the semester is in the past, set it to "Previous Semesters"; else, leave it the same
+    // if the semester is in the past, set it to "Taken"; else, leave it the same
     if (semesterAbbreviatedYear < currentAbbreviatedYear // i.e, class was in 2018, ∴ in the past
         || ( semesterAbbreviatedYear === currentAbbreviatedYear
             && (
@@ -25,6 +25,6 @@ export function renameSemester(semester: string): string {
                 || (currentSemester.includes("Su") && semester.includes("Sp")) // i.e. currently Summer semester, class was the Spring right before, ∴ in the past
             )
         ))
-        return "Previous Semesters"
+        return "Taken"
     else return semester
 }

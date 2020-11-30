@@ -105,7 +105,7 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
     }
 
     // @ts-ignore
-    const semesters = ["Previous Semesters", ...semesterGenerator()]
+    const semesters = ["Taken", ...semesterGenerator()]
 
     return <>
         <InfoBox yVal={props.yValue}>
@@ -132,7 +132,7 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
                         <SemesterButton
                             color={getColorOfSemester(sem)}
                             selected={props.semester === sem}
-                            doubleWidth={sem.includes("Sem") ? true : false} // "Previous Semesters" should be double witdth
+                            doubleWidth={sem === "Taken"} // "Taken" should be double witdth
                             onClick={() => {
                                 props.onSemesterChanged(sem);
                             }}>

@@ -211,8 +211,7 @@ const resizeableBoxStyle = (circle: boolean) => ({
     borderRadius: circle ? "200%" :  "17.5%",
 });
 
-const BoxAnnotation = styled.div<{ boxHeight: number }>`
-  margin-top: ${props => props.boxHeight * 1.3}px;
+export const BoxAnnotation = styled.div<{ boxHeight: number }>`
   font-size: 1vmax;
   background-color: rgba(255,255,255,0.7);
   font-weight: bold;
