@@ -91,8 +91,7 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
         {selectedCourse}
         <FlowchartWrapper className='exportImage' ref={ref}>
-            <CourseInfoBox yValue={(flowchartBoxes.find(box => box.name === selectedCourse))?.top}
-                course={selectedCourse}
+            <CourseInfoBox flowchartBox={(flowchartBoxes.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
                 onSemesterChanged={(newSemester: string) => {
                     const newMap = { ...courseSemestersMap, [selectedCourse]: newSemester }

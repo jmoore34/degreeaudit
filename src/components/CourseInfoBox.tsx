@@ -2,16 +2,21 @@ import React, { FunctionComponent, useState } from "react";
 import { Component } from 'react';
 import styled from "styled-components";
 import Color from "color";
-import { getColorOfSemester } from "./Flowchart";
+import {FlowchartBox, getColorOfSemester} from "./Flowchart";
 
 
-const InfoBox = styled.div <{ yVal: string }>`
+const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
     z-index: 10;
     position: absolute;
     background-color: rgba(255,255,255,0.85);
     border: 1px solid black;
-    width: 40;
-    top: calc(${props => props.yVal}% + 5%);
+    width: 40rem;
+    top: calc(${props => props.flowchartBox.top}% + 5%);
+    // center it horizontally, taking into account the width is 40rem, ∴ half the width is 20rem.
+    // (but we actually tweak these values slightly because of padding etc)
+    // first part of clamp makes sure it doesn't go outside of the flowchart (too far left)
+    // 3rd part of clamp makes sure it doesn't go outside of the flowchart (too far right)
+    left: clamp(-1rem, calc(${props => props.flowchartBox.left}% - 17rem), 100% - 40rem);
     margin-left: auto;
     margin-right: auto;
     padding: 1rem;
@@ -97,18 +102,18 @@ function* semesterGenerator() {
 }
 
 
-export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void }> = (props) => {
-    //const [semester, setSemester] = useState("");
-
-    if (!props.course) {
+export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | null, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void }> = (props) => {
+    if (!props.flowchartBox) {
         return <></>
     }
+
+    const course = props.flowchartBox.name
 
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
 
     return <>
-        <InfoBox yVal={props.yValue}>
+        <InfoBox flowchartBox={props.flowchartBox}>
             <button
                 onClick={() => {
                     props.onClose();
@@ -116,7 +121,7 @@ export const CourseInfoBox: FunctionComponent<{ yValue: string, course: string, 
                 Close
             </button>
             <IFrameWrapper>
-                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + props.course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
+                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
             </IFrameWrapper>
             <ButtonContainer>
                 <SemesterButton
