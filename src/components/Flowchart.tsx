@@ -10,6 +10,7 @@ import {Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
 import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
 import {useFlowchart} from "../useFlowchart";
 import {FlowchartBackground, FlowchartWrapper, HighlightBox} from "./flowchart_components_in_common";
+import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
 
 const localStorageKey = "courseSemesters"
 // load the student's course->semester mappings from localStorage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
@@ -32,8 +33,8 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
     useRerenderOnResize()
 
-    const [selectedMajor, setSelectedMajor] = useState<DropdownItem | null>(dropdownDefaultMajor)
-    const [selectedYear, setSelectedYear] = useState<DropdownItem | null>(dropdownDefaultYear)
+    const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
+    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
@@ -44,14 +45,14 @@ export const Flowchart: FunctionComponent<{}> = () => {
             <h1>Please color your classes according to which semester you plan on taking them</h1>
             <Row>
                 <StyledSelect
-                    defaultValue={dropdownDefaultMajor}
+                    defaultValue={selectedMajor}
                     onChange={(newVal: any) => {
                         setSelectedMajor(newVal)
                     }}
                     options={dropdownMajors}
                 />
                 <StyledSelect
-                    defaultValue={dropdownDefaultYear}
+                    defaultValue={selectedYear}
                     onChange={(newVal: any) => {
                         setSelectedYear(newVal)
                     }}

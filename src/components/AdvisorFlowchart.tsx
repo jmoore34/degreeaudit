@@ -8,6 +8,7 @@ import {BoxAnnotation} from "./BoxAnnotation";
 import {useFlowchart} from "../useFlowchart";
 import {Column, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
 import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
+import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
 
 const courseNamePrompt = "Enter the class name"
 
@@ -25,8 +26,8 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
     useRerenderOnResize()
 
-    const [selectedMajor, setSelectedMajor] = useState<DropdownItem | null>(dropdownDefaultMajor)
-    const [selectedYear, setSelectedYear] = useState<DropdownItem | null>(dropdownDefaultYear)
+    const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
+    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
@@ -39,14 +40,14 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                 <h2>Choose which flowchart to use</h2>
                 <Row>
                     <StyledSelect
-                        defaultValue={dropdownDefaultMajor}
+                        defaultValue={selectedMajor}
                         onChange={(newVal: any) => {
                             setSelectedMajor(newVal)
                         }}
                         options={dropdownMajors}
                     />
                     <StyledSelect
-                        defaultValue={dropdownDefaultYear}
+                        defaultValue={selectedYear}
                         onChange={(newVal: any) => {
                             setSelectedYear(newVal)
                         }}
