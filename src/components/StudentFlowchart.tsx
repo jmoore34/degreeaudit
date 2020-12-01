@@ -64,7 +64,9 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     if (exportPage) {
                         setSelectedCourse(null); // so that the CourseInfoBox is hidden
                         setTimeout(() => {
-                            html2canvas(exportPage[0] as HTMLElement).then(canvas => {
+                            html2canvas(exportPage[0] as HTMLElement, {
+                                useCORS: true
+                            }).then(canvas => {
                                 //document.body.appendChild(canvas)
                                 var link = document.createElement("a");
                                 document.body.appendChild(link);
