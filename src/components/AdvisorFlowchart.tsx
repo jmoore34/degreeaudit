@@ -186,14 +186,26 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
             }}
             onResizeStop={(e, dir, refToElement, delta, position) => {
                 const rect = refToElement.getBoundingClientRect()
-                props.onBoxChange({
+                const newBox = {
                     ...props.box,
                     width: 100 * rect.width / flowchart.width,
                     height: 100 * rect.height / flowchart.height,
                     left: 100 * (rect.left - flowchart.left) / flowchart.width,
                     top: 100 * (rect.top - flowchart.top) / flowchart.height
-                })
-                console.log("resized")
+                }
+                props.onBoxChange(newBox)
+                // Experimental fix (set the state again slightly later) for resizeable boxes teleporting (only sometimes) on resize
+                setTimeout(() => {
+                    const rect = refToElement.getBoundingClientRect()
+                    const newBox = {
+                        ...props.box,
+                        width: 100 * rect.width / flowchart.width,
+                        height: 100 * rect.height / flowchart.height,
+                        left: 100 * (rect.left - flowchart.left) / flowchart.width,
+                        top: 100 * (rect.top - flowchart.top) / flowchart.height
+                    }
+                    props.onBoxChange(newBox)
+                }, 15)
             }}
             onContextMenu={(e: Event) => {
                 e.preventDefault()
