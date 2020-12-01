@@ -6,7 +6,7 @@ import { CourseInfoBox } from "./CourseInfoBox";
 import Color from "color";
 import {renameSemester, useRerenderOnResize} from "../util";
 import html2canvas from "html2canvas";
-import {BoxAnnotation} from "./AdvisorFlowchart";
+import {BoxAnnotation} from "./BoxAnnotation";
 
 export const FlowchartBackground = styled.img`
     width: 100%;

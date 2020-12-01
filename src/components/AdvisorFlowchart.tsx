@@ -7,6 +7,7 @@ import { Rnd } from "react-rnd";
 import { useRerenderOnResize } from "../util";
 import axios from 'axios';
 import Select from "react-select";
+import {BoxAnnotation} from "./BoxAnnotation";
 
 const courseNamePrompt = "Enter the class name"
 const major: any = [
@@ -68,9 +69,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             params: {
                 "filename": selectedFlowchart + ".json"
             }
-        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err + " " + err.response.msg))
-        //sdfd
-
+        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err + " " + JSON.stringify(err)))
     }, [selectedFlowchart])
 
 
@@ -211,14 +210,7 @@ const resizeableBoxStyle = (circle: boolean) => ({
     borderRadius: circle ? "200%" :  "17.5%",
 });
 
-export const BoxAnnotation = styled.div<{ boxHeight: number }>`
-  font-size: 1vmax;
-  background-color: rgba(255,255,255,0.7);
-  font-weight: bold;
-  position: absolute;
-  color: black;
-  float: left;
-`;
+
 
 interface ResizeableBoxProps {
     box: FlowchartBox
@@ -242,38 +234,48 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
     // console.log(props.box)
     // console.log({x, y, width, height})
 
-    return <Rnd
-        ref={rndRef}
-        size={{ width, height }}
-        position={{ x, y }}
-        style={resizeableBoxStyle(props.box.name.includes("core"))}
-        onDragStop={(e, data) => {
-            props.onBoxChange({
-                ...props.box,
-                left: (data.x) / flowchart.width * 100,
-                top: (data.y) / flowchart.height * 100
-            })
-            console.log("dragged")
-        }}
-        onResizeStop={(e, dir, refToElement, delta, position) => {
-            const rect = refToElement.getBoundingClientRect()
-            props.onBoxChange({
-                ...props.box,
-                width: 100 * rect.width / flowchart.width,
-                height: 100 * rect.height / flowchart.height,
-                left: 100 * (rect.left - flowchart.left) / flowchart.width,
-                top: 100 * (rect.top - flowchart.top) / flowchart.height
-            })
-            console.log("resized")
-        }}
-        onContextMenu={(e: Event) => {
-            e.preventDefault()
-            const newName = prompt(courseNamePrompt + "\n\n(Leave empty to delete box)")
-            if (newName === null)
-                return
-            props.onRename(props.box.name, newName);
-        }}
-    >
-        <BoxAnnotation boxHeight={height}>{props.box.name.replace(/'/g, "")}</BoxAnnotation>
-    </Rnd>
+    return <>
+            <Rnd
+            ref={rndRef}
+            size={{ width, height }}
+            position={{ x, y }}
+            style={resizeableBoxStyle(props.box.name.includes("core"))}
+            onDragStop={(e, data) => {
+                props.onBoxChange({
+                    ...props.box,
+                    left: (data.x) / flowchart.width * 100,
+                    top: (data.y) / flowchart.height * 100
+                })
+                console.log("dragged")
+            }}
+            onResizeStop={(e, dir, refToElement, delta, position) => {
+                const rect = refToElement.getBoundingClientRect()
+                props.onBoxChange({
+                    ...props.box,
+                    width: 100 * rect.width / flowchart.width,
+                    height: 100 * rect.height / flowchart.height,
+                    left: 100 * (rect.left - flowchart.left) / flowchart.width,
+                    top: 100 * (rect.top - flowchart.top) / flowchart.height
+                })
+                console.log("resized")
+            }}
+            onContextMenu={(e: Event) => {
+                e.preventDefault()
+                const newName = prompt(courseNamePrompt + "\n\n(Leave empty to delete box)")
+                if (newName === null)
+                    return
+                props.onRename(props.box.name, newName);
+            }}
+        >
+
+        </Rnd>
+        <BoxAnnotation boxHeight={height} style={{
+                top: (y + height) + "px",
+                left: x + "px",
+                width: width + "px",
+                textOverflow: "ellipsis",
+                overflowX: "hidden"
+            }}>{props.box.name.replace(/'/g, "")}
+        </BoxAnnotation>
+    </>
 }
