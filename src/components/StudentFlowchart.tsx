@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import styled from "styled-components";
 import { CourseInfoBox } from "./CourseInfoBox";
-import {renameSemester, useRerenderOnResize} from "../util";
+import {renameSemester, useRerenderOnResizeAndOnScroll} from "../util";
 import html2canvas from "html2canvas";
 import {BoxAnnotation} from "./BoxAnnotation";
 import {Button, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
@@ -27,7 +27,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
     const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
     const [selectedCourse, setSelectedCourse]: any = useState("");
 
-    useRerenderOnResize()
+    useRerenderOnResizeAndOnScroll()
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import {FlowchartBackground, FlowchartWrapper, FlowchartBox} from "./flowchart_components_in_common";
 import { Rnd } from "react-rnd";
-import { useRerenderOnResize } from "../util";
+import { useRerenderOnResizeAndOnScroll } from "../util";
 import axios from 'axios';
 import {BoxAnnotation} from "./BoxAnnotation";
 import {unathorizedMessage, useFlowchart} from "../useFlowchart";
@@ -24,7 +24,7 @@ function ensureNameUnique(name: string, existingNames: Array<string>) {
 export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const flowchartRef = React.useRef(null)
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
-    useRerenderOnResize()
+    useRerenderOnResizeAndOnScroll()
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
@@ -195,18 +195,6 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
                     top: 100 * (rect.top - flowchart.top) / flowchart.height
                 }
                 props.onBoxChange(newBox)
-                // Experimental fix (set the state again slightly later) for resizeable boxes teleporting (only sometimes) on resize
-                setTimeout(() => {
-                    const rect = refToElement.getBoundingClientRect()
-                    const newBox = {
-                        ...props.box,
-                        width: 100 * rect.width / flowchart.width,
-                        height: 100 * rect.height / flowchart.height,
-                        left: 100 * (rect.left - flowchart.left) / flowchart.width,
-                        top: 100 * (rect.top - flowchart.top) / flowchart.height
-                    }
-                    props.onBoxChange(newBox)
-                }, 15)
             }}
             onContextMenu={(e: Event) => {
                 e.preventDefault()

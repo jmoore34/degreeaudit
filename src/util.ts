@@ -1,13 +1,16 @@
 import {useEffect, useReducer} from "react";
 import {currentSemester} from "./components/CourseInfoBox";
 
-// react hook to rerender on window resize
-export function useRerenderOnResize() {
+// react hook to rerender on window resize and on window scroll
+// TODO: Improve performance by not having causing a rerender on every single callback (e.g. waiting till the end, using a setTimeout, etc)
+export function useRerenderOnResizeAndOnScroll() {
     const [, forceRerender] = useReducer(x => x+1, 0)
     useEffect(() => {
         window.addEventListener("resize", forceRerender)
+        window.addEventListener("scroll", forceRerender)
         return () => {
             window.removeEventListener("resize", forceRerender)
+            window.removeEventListener("scroll", forceRerender)
         }
     }, [])
 }
