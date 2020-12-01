@@ -1,31 +1,16 @@
-import styled from "styled-components";
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { CourseInfoBox } from "./CourseInfoBox";
-//import cs from "../flowcharts/cs.webp";
-import { FlowchartBackground, FlowchartBox, FlowchartWrapper, getColorOfSemester, HighlightBox } from "./Flowchart";
+import { FlowchartBox, getColorOfSemester} from "./Flowchart";
+import {FlowchartBackground, FlowchartWrapper} from "./flowchart_components_in_common";
 import { Rnd } from "react-rnd";
 import { useRerenderOnResize } from "../util";
 import axios from 'axios';
-import Select from "react-select";
 import {BoxAnnotation} from "./BoxAnnotation";
+import {useFlowchart} from "../useFlowchart";
+import {Column, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
+import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
 
 const courseNamePrompt = "Enter the class name"
-const major: any = [
-    { value: 'BMEN', label: 'Biomedical Engineering' },
-    { value: 'CE', label: 'Computer Engineering' },
-    { value: 'CS', label: 'Computer Science' },
-    { value: 'EE', label: 'Electrical Engineering' },
-    { value: 'MECH', label: 'Mechancial Engineering' },
-    { value: 'SE', label: 'Software Engineering' },
-];
 
-var years: any = [];
-for (let i = new Date().getFullYear(); i >= 2016; i--) {
-    years.push({ value: i, label: i })
-}
-
-const defaultMajor = major[0]
-const defaultYear = years[0]
 
 // Given a name, returns a modified version of the name that is sure to be unique
 const CHAR_TO_APPEND_TO_NAMES = "'"
@@ -40,38 +25,12 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
     useRerenderOnResize()
 
-    const [selectedMajor, setSelectedMajor] = useState<{ value: string, label: string } | null>(defaultMajor)
-    const [selectedYear, setSelectedYear] = useState<{ value: string, label: string } | null>(defaultYear)
+    const [selectedMajor, setSelectedMajor] = useState<DropdownItem | null>(dropdownDefaultMajor)
+    const [selectedYear, setSelectedYear] = useState<DropdownItem | null>(dropdownDefaultYear)
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
-    // __setFlowchart updates the local state only and should not be called directly
-    // Instead, flowchart updates should call updateFlowchart(), which both updates the local
-    // state by calling __setFlowchart as well as sends the changes to the server
-    const [flowchart, __setFlowchart] = useState<Array<FlowchartBox>>([])
-
-    async function updateFlowchart(newFlowchart: any) {
-        var formData = new FormData();
-        formData.append("filename", selectedFlowchart + ".json");
-        formData.append("body", JSON.stringify(newFlowchart));
-        formData.append("password", "password");
-        axios.post('http://127.0.0.1:5000/api/json', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-        __setFlowchart(newFlowchart)
-    }
-
-    useEffect(() => {
-        axios.get('http://127.0.0.1:5000/api/json', {
-            // https://masteringjs.io/tutorials/axios/get-query-params
-            params: {
-                "filename": selectedFlowchart + ".json"
-            }
-        }).then(result => {__setFlowchart(result.data)}).catch( err => alert(err + " " + JSON.stringify(err)))
-    }, [selectedFlowchart])
-
+    const {flowchart, updateFlowchart} = useFlowchart(selectedFlowchart)
 
     return <>
         <h2>{selectedFlowchart}</h2>
@@ -80,18 +39,18 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                 <h2>Choose which flowchart to use</h2>
                 <Row>
                     <StyledSelect
-                        defaultValue={defaultMajor}
+                        defaultValue={dropdownDefaultMajor}
                         onChange={(newVal: any) => {
                             setSelectedMajor(newVal)
                         }}
-                        options={major}
+                        options={dropdownMajors}
                     />
                     <StyledSelect
-                        defaultValue={defaultYear}
+                        defaultValue={dropdownDefaultYear}
                         onChange={(newVal: any) => {
                             setSelectedYear(newVal)
                         }}
-                        options={years}
+                        options={dropdownYears}
                     />
                 </Row>
             </Column>
@@ -176,30 +135,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
 
 
 }
-const WhiteSpaceBlock = styled.div`
-    min-width: 3em;
-    max-width: 20vw;
-    display: block;
-`
 
-
-const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-
-`
-const Row = styled.div`
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-`
-
-
-const StyledSelect = styled(Select)`
-    width: 20ch;
-    margin: 10px;
-
-`
 
 const resizeableBoxStyle = (circle: boolean) => ({
     display: "flex",
