@@ -4,7 +4,7 @@ import { CourseInfoBox } from "./CourseInfoBox";
 import {renameSemester, useRerenderOnResize} from "../util";
 import html2canvas from "html2canvas";
 import {BoxAnnotation} from "./BoxAnnotation";
-import {Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
+import {Button, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
 import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
 import {useFlowchart} from "../useFlowchart";
 import {FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox} from "./flowchart_components_in_common";
@@ -20,9 +20,7 @@ for (const [course, semester] of Object.entries(initialSemesterMap)) {
     postprocessedInitialSemesterMap[course] = renameSemester(semester as string)
 }
 
-const Button = styled.button`
-  height: 2rem;
-`;
+
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)

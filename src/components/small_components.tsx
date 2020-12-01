@@ -27,3 +27,11 @@ export const StyledSelect = styled(Select)`
     margin: 10px;
     z-index: 10;
 `
+
+export const Button = styled.button`
+  height: 2rem;
+`;
+
+export const Input = styled.input`
+  height: 2rem;
+`;

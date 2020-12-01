@@ -30,7 +30,7 @@ def has_filetype(filename, filetype):
 def upload_file():
     if request.method == 'POST':
         if request.form["password"] != "password":
-            return "Error"
+            return "Unauthorized", 401
         # check if the post request has the file part
         if 'file' not in request.files:
             print('file no part')
@@ -63,7 +63,7 @@ def pixelInfo():
     if request.method == 'POST':
         filePath = JSON_FOLDER/request.form["filename"]
         if request.form["password"] != "password":
-            return "Error"
+            return "Unauthorized", 401
         with open(filePath, 'w') as f:
             f.write(request.form["body"])
             return "ok"

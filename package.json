@@ -19,6 +19,7 @@
     "html2canvas": "^1.0.0-rc.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-radio-buttons": "^1.2.2",
     "react-rnd": "^10.2.3",
     "react-scripts": "3.4.3",
     "react-select": "^3.1.0",

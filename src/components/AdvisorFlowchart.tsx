@@ -4,10 +4,11 @@ import { Rnd } from "react-rnd";
 import { useRerenderOnResize } from "../util";
 import axios from 'axios';
 import {BoxAnnotation} from "./BoxAnnotation";
-import {useFlowchart} from "../useFlowchart";
-import {Column, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
+import {unathorizedMessage, useFlowchart} from "../useFlowchart";
+import {Column, Input, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
 import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
 import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
+import {enteredAdvisorPassword} from "../App";
 
 const courseNamePrompt = "Enter the class name"
 
@@ -33,7 +34,6 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const {flowchart, updateFlowchart} = useFlowchart(selectedFlowchart)
 
     return <>
-        <h2>{selectedFlowchart}</h2>
         <Row>
             <Column>
                 <h2>Choose which flowchart to use</h2>
@@ -56,16 +56,16 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             </Column>
             <Column><WhiteSpaceBlock /></Column>
             <Column>
-                <h2>Upload new Files</h2>
+                <h2>Replace current flowchart's PDF</h2>
                 <form method='post' encType='multipart/form-data'>
-                    <input
+                    <Input
                         type='file'
                         name='upload'
                         onChange={async (e) => {
                             if (e.target.files && e.target.files[0]) {
                                 var formData = new FormData();
                                 formData.append("file", e.target.files[0]);
-                                formData.append("password", "password");
+                                formData.append("password", enteredAdvisorPassword);
                                 const response = axios.post('http://127.0.0.1:5000/api/pdf', formData, {
                                     headers: {
                                         'Content-Type': 'multipart/form-data'
@@ -75,14 +75,15 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                                     const year = selectedYear;
                                     setSelectedYear(null);
                                     setSelectedYear(year);
-                                }).catch((error) => {
-                                    console.log(error);
-                                    alert(error + " " + error.response.msg);
+                                }).catch((err) => {
+                                    if (err && err.message && err.message.includes("401"))
+                                        alert(unathorizedMessage)
+                                    else
+                                        alert(err + " " + JSON.stringify(err))
                                 })
                             }
                         }}
                     />
-                    <input type='password' name='password' />
                 </form>
             </Column>
         </Row>
