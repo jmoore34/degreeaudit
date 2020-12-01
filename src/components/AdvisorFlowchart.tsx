@@ -125,7 +125,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                     newName = ensureNameUnique(newName, existingNames)
                     let newFlowchart = [...flowchart]
                     newFlowchart[flowchart.findIndex(b => b.name === oldName)].name = newName
-                    newFlowchart = newFlowchart.filter(b => b.name && b.name.length > 4)
+                    newFlowchart = newFlowchart.filter(b => b.name && b.name.length >= 4) // delete empty boxes. shortest course name is "core"
                     console.log(newFlowchart)
                     updateFlowchart(newFlowchart)
                 }}
