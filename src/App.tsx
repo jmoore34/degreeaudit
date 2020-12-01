@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { AdvisorFlowchart } from './components/AdvisorFlowchart';
 import { StudentFlowchart } from "./components/StudentFlowchart";
@@ -18,7 +18,7 @@ function App() {
     return (
         <div className="App">
             {enteredAdvisorPassword && modeSwitcherComponent} {/*show mode switcher only if advisor password entered*/}
-            {mode === "student" ? <StudentFlowchart/> : <AdvisorFlowchart/>}
+            {mode === "student" ? <StudentFlowchart /> : <AdvisorFlowchart />}
         </div>
     );
 }
@@ -31,7 +31,7 @@ export const enteredAdvisorPassword: string = (window.location.hash?.substring(1
 // Used as reference: https://github.com/xwiki-labs/cryptpad/search?q=history.replaceState (thank you, cryptpad!)
 window.history.replaceState({}, document.title, '#')
 
-const StyledRadioGroup = styled(RadioGroup)`
+export const StyledRadioGroup = styled(RadioGroup)`
   max-width: 60ch;
   padding-top: 1em;
 `;

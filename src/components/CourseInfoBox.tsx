@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from "react";
 import { Component } from 'react';
 import styled from "styled-components";
 import Color from "color";
-import {getColorOfSemester} from "./StudentFlowchart";
-import {FlowchartBox} from "./flowchart_components_in_common";
+import { getColorOfSemester } from "./StudentFlowchart";
+import { FlowchartBox } from "./flowchart_components_in_common";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
@@ -94,9 +94,9 @@ function getNextSemester(currentSemester: string) {
 
 // Generator function (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)
 // to generate 12 semesters starting with the current one
-function* semesterGenerator() {
+export function* semesterGenerator() {
     let semester = currentSemester
-    for (let i=0; i<12; i++) {
+    for (let i = 0; i < 12; i++) {
         yield semester
         semester = getNextSemester(semester)
     }
@@ -135,15 +135,15 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
                     Unset
                 </SemesterButton>
                 {semesters.map((sem, index, arr) =>
-                        <SemesterButton
-                            color={getColorOfSemester(sem)}
-                            selected={props.semester === sem}
-                            doubleWidth={sem === "Taken"} // "Taken" should be double witdth
-                            onClick={() => {
-                                props.onSemesterChanged(sem);
-                            }}>
-                            {sem}
-                        </SemesterButton>)}
+                    <SemesterButton
+                        color={getColorOfSemester(sem)}
+                        selected={props.semester === sem}
+                        doubleWidth={sem === "Taken"} // "Taken" should be double witdth
+                        onClick={() => {
+                            props.onSemesterChanged(sem);
+                        }}>
+                        {sem}
+                    </SemesterButton>)}
             </ButtonContainer>
         </InfoBox>
     </>
