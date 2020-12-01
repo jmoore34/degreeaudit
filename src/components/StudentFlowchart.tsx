@@ -1,15 +1,13 @@
 import React, { FunctionComponent, useState } from "react";
 import styled from "styled-components";
-import cs from '../flowcharts/cs.webp';
 import { CourseInfoBox } from "./CourseInfoBox";
-import Color from "color";
 import {renameSemester, useRerenderOnResize} from "../util";
 import html2canvas from "html2canvas";
 import {BoxAnnotation} from "./BoxAnnotation";
 import {Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
 import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
 import {useFlowchart} from "../useFlowchart";
-import {FlowchartBackground, FlowchartWrapper, HighlightBox} from "./flowchart_components_in_common";
+import {FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox} from "./flowchart_components_in_common";
 import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
 
 const localStorageKey = "courseSemesters"
@@ -26,7 +24,7 @@ const Button = styled.button`
   height: 2rem;
 `;
 
-export const Flowchart: FunctionComponent<{}> = () => {
+export const StudentFlowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
     const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
     const [selectedCourse, setSelectedCourse]: any = useState("");
@@ -38,7 +36,7 @@ export const Flowchart: FunctionComponent<{}> = () => {
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
-    const {flowchart, updateFlowchart} = useFlowchart(selectedFlowchart)
+    const { flowchart } = useFlowchart(selectedFlowchart)
 
     return <>
         <div>
@@ -163,10 +161,4 @@ export function getColorOfSemester(semester: string) {
 }
 
 
-export interface FlowchartBox {
-    name: string
-    left: any // percentage
-    top: any
-    height: any
-    width: any
-}
+

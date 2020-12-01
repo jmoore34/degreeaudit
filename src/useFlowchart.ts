@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {FlowchartBox} from "./components/Flowchart";
 import axios from "axios";
+import {FlowchartBox} from "./components/flowchart_components_in_common";
 
 interface useFlowchartReturn {
     flowchart: Array<FlowchartBox>,

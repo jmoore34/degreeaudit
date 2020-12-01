@@ -2,7 +2,8 @@ import React, { FunctionComponent, useState } from "react";
 import { Component } from 'react';
 import styled from "styled-components";
 import Color from "color";
-import {FlowchartBox, getColorOfSemester} from "./Flowchart";
+import {getColorOfSemester} from "./StudentFlowchart";
+import {FlowchartBox} from "./flowchart_components_in_common";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`

@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { FlowchartBox, getColorOfSemester} from "./Flowchart";
-import {FlowchartBackground, FlowchartWrapper} from "./flowchart_components_in_common";
+import {FlowchartBackground, FlowchartWrapper, FlowchartBox} from "./flowchart_components_in_common";
 import { Rnd } from "react-rnd";
 import { useRerenderOnResize } from "../util";
 import axios from 'axios';

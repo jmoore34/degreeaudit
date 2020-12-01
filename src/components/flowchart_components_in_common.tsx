@@ -1,13 +1,19 @@
 import styled from "styled-components";
 import Color from "color";
 import {BoxAnnotation} from "./BoxAnnotation";
-import {FlowchartBox} from "./Flowchart";
+
+export interface FlowchartBox {
+    name: string
+    left: any // percentage
+    top: any
+    height: any
+    width: any
+}
 
 export const FlowchartBackground = styled.img`
     width: 100%;
     //height: auto;
 `;
-
 
 export const HighlightBox = styled.div<{ box: FlowchartBox, color: string }>`
     top: ${props => props.box.top}%;
