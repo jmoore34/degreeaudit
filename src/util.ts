@@ -31,3 +31,51 @@ export function renameSemester(semester: string): string {
         return "Taken"
     else return semester
 }
+
+
+
+
+//Array of colors that the courseinfobox buttons will cycle through
+const colors = ["#cc0058", "#3dffa5", "#fa5700", "#3D77FF", "#9900FF", "#00DB9A", "#E3FF42", "#FF00B3", "#0065A2", "#00DB9A", "#FF2E2E", "#FFBE0A"]
+
+/*Function that determines which semester is given to which color in the array above. The colors will repeat every four years
+ * e.g. Spring 2021 starts as the first color. The color will be reused when Spring 2025 is generated.
+*/
+export function getColorOfSemester(semester: string) {
+
+    //Default
+    if (!semester || semester === "") {
+        return "transparent";
+    }
+
+    else if (semester === "Taken")
+        return "gray";
+
+    else {
+        //Gets semester year e.g. "Spring 24" = 24
+        let num = parseInt(semester.substring(semester.length - 2))
+
+        //Subtract 1 so that the starting year (2021 -> 21)%4 = 0
+        num -= 1;
+        //Makes colors repeat every four years
+        num %= 4;
+        //but we want different indexes/colors for spring, summer and fall. So we triple the size of the array and then add 0,1,2 to indicate spring/summer/fall
+        num *= 3;
+
+
+        if (semester.toLowerCase().includes("sp")) {
+            //"adds 0" to index for spring
+        }
+        else if (semester.toLowerCase().includes("su")) {
+            //adds 1 to index for summer
+            num += 1;
+        }
+        else if (semester.toLowerCase().includes("fa")) {
+            //adds 2 to index for fall
+            num += 2;
+        }
+
+        return colors[num];
+    }
+
+}
