@@ -15,11 +15,16 @@ const localStorageKey = "courseSemesters"
 // defaulting to an empty map
 const initialSemesterMap = JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {}
 // postprocess this map to rename past semesters (e.g. "Fall 2015") to "Taken"
-let postprocessedInitialSemesterMap: any = {};
-for (const [course, semester] of Object.entries(initialSemesterMap)) {
-    postprocessedInitialSemesterMap[course] = renameSemester(semester as string)
+function postprocessSemesterMap(semesterMap: any) {
+    let result: any = {};
+    for (const [course, semester] of Object.entries(semesterMap)) {
+        if (course && semester) {
+            result[course] = renameSemester(semester as string)
+        }
+    }
+    return result
 }
-
+const postprocessedInitialSemesterMap = postprocessSemesterMap(initialSemesterMap)
 
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
