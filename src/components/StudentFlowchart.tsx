@@ -86,7 +86,6 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                 }}>Export PDF as Image</Button>
             </Row>
         </div>
-        {selectedCourse}
         <FlowchartWrapper className='exportImage' ref={ref}>
             <CourseInfoBox flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
