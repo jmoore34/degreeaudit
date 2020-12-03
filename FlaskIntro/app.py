@@ -7,17 +7,33 @@ from pathlib import Path
 from os import path
 from flask_cors import CORS, cross_origin
 import os
-
+from passlib.hash import sha256_crypt
 
 UPLOAD_FOLDER = '../src/flowcharts'
 ALLOWED_EXTENSIONS = {'pdf', 'json'}
 JSON_FOLDER = Path('../src/json')
+
+PASSWORD_FILE = '../PASSWORD_HASH_DO_NOT_COMMIT'
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
+
+def change_password(newPassword):
+    with open(PASSWORD_FILE, 'w') as f:
+        f.write(sha256_crypt.encrypt(newPassword))
+
+# uncomment to set password
+#change_password("password goes here")
+
+def is_correct_password(password):
+    if not path.exists(PASSWORD_FILE):
+        return 'Advisor password not set.', 500
+    with open(PASSWORD_FILE) as f:
+        correctPasswordHash = f.read()
+        return sha256_crypt.verify(password, correctPasswordHash)
 
 
 def has_filetype(filename, filetype):
@@ -29,8 +45,8 @@ def has_filetype(filename, filetype):
 @cross_origin()
 def upload_file():
     if request.method == 'POST':
-        if request.form["password"] != "password":
-            return "Unauthorized", 401
+        if not is_correct_password(request.form["password"]):
+            return "Unauthorized: incorrect password", 401
         # check if the post request has the file part
         if 'file' not in request.files:
             print('file no part')
@@ -62,8 +78,8 @@ def upload_file():
 def pixelInfo():
     if request.method == 'POST':
         filePath = JSON_FOLDER/request.form["filename"]
-        if request.form["password"] != "password":
-            return "Unauthorized", 401
+        if not is_correct_password(request.form["password"]):
+            return "Unauthorized: incorrect password", 401
         with open(filePath, 'w') as f:
             f.write(request.form["body"])
             return "ok"

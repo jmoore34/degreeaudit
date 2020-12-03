@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from "react";
 import { Component } from 'react';
 import styled from "styled-components";
 import Color from "color";
-import { getColorOfSemester } from "./StudentFlowchart";
 import { FlowchartBox } from "./flowchart_components_in_common";
+import { getColorOfSemester } from "../util";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
@@ -102,8 +102,29 @@ export function* semesterGenerator() {
     }
 }
 
+export function generateMajorURL(major: string) {
+    let majorURL = '';
+    let engineering = true;
+    if (major === 'CS') {
+        majorURL = 'computer-science'
+        engineering = false;
+    }
+    else if (major === 'CE')
+        majorURL = 'computer'
+    else if (major === 'BMEN')
+        majorURL = 'biomedical'
+    else if (major === 'EE')
+        majorURL = 'electrical'
+    else if (major === 'SE')
+        majorURL = 'software'
+    else
+        majorURL = 'mechanical'
+    if (engineering)
+        majorURL += '-engineering'
+    return majorURL
+}
 
-export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | null, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void }> = (props) => {
+export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | null, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void, catalogYear: string, major: string }> = (props) => {
     if (!props.flowchartBox) {
         return <></>
     }
@@ -112,6 +133,65 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
 
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
+    let view =
+        <CourseFrame src={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/courses/" + course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
+    if (course.includes('core')) {
+        view =
+            <>
+                <h2>The credits required are:</h2>
+                <ul>
+                    <li>010 Communication (6 semester credit hours)</li>
+                    <li>020 Mathematics (3 semester credit hours)</li>
+                    <li>030 Life and Physical Sciences (6 semester credit hours)</li>
+                    <li>040 Language, Philosophy and Culture (3 semester credit hours)</li>
+                    <li>050 Creative Arts (3 semester credit hours)</li>
+                    <li>060 American History (6 semester credit hours)</li>
+                    <li>070 Government/Political Science (6 semester credit hours)</li>
+                    <li>080 Social and Behavioral Sciences (3 semester credit hours)</li>
+                    <li>090 Component Area Option (6 semester credit hours)</li>
+                </ul>
+                <h3>Go here for more information</h3>
+                <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/curriculum/core-curriculum"}>Go here for more information</a>
+            </>
+    }
+    else if (course.includes('free')) {
+        view =
+            <>
+                <p>
+                    Most classes can be used to satisfy free electives. Courses with STAT and ITSS prefixes cannot be used to satisfy free electives.
+                    Math classes below MATH 2413 and classes equivalent to those you have already taken also cannot be used to satisfy free electives."
+                </p>
+
+            </>
+    }
+    else if (course.includes('guided')) {
+        view =
+            <>
+                <br></br>
+                <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/programs/ecs/" + generateMajorURL(props.major)}>To get a list of guided electives click here and scroll down to Major Guided Electives</a>
+            </>
+    }
+    else if (course.includes('prescribed')) {
+        if (props.major === 'bmen') {
+            view =
+                <>
+                    <br></br>
+                    <p>
+                        Students pursuing the general program take 9 semester credit hours using any other BMEN 3000 level or higher class or any other
+                        upper division engineering course with approval from the department. Students must document 9 semester credit hours of
+                        engineering content for these to count towards their degree.
+                </p>
+                </>
+        }
+        else {
+            view =
+                <>
+                    <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/programs/ecs/" + generateMajorURL(props.major)}>To get a list of guided electives click here and scroll down to Major Prescribed Electives</a>
+                </>
+        }
+    }
+
+
 
     return <>
         <InfoBox flowchartBox={props.flowchartBox}>
@@ -122,7 +202,7 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
                 Close
             </button>
             <IFrameWrapper>
-                <CourseFrame src={"https://catalog.utdallas.edu/2020/undergraduate/courses/" + course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
+                {view}
             </IFrameWrapper>
             <ButtonContainer>
                 <SemesterButton
