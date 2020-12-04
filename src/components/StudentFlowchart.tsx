@@ -4,7 +4,7 @@ import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
 import { BoxAnnotation } from "./BoxAnnotation";
-import { Button, Row, StyledSelect, WhiteSpaceBlock } from "./small_components";
+import { Button, Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
 import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
 import { useFlowchart } from "../useFlowchart";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
@@ -34,6 +34,7 @@ function postprocessSemesterMap(semesterMap: any) {
 const postprocessedInitialSemesterMap = postprocessSemesterMap(initialSemesterMap)
 
 
+
 export const StudentFlowchart: FunctionComponent<{}> = () => {
     const ref = React.useRef(null)
     const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
@@ -47,6 +48,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
     const { flowchart } = useFlowchart(selectedFlowchart)
+
     const flowView = <>
         <div>
             <h1>Please color your classes according to which semester you plan on taking them</h1>
@@ -75,6 +77,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     if (exportPage) {
                         setSelectedCourse(null); // so that the CourseInfoBox is hidden
                         setTimeout(() => {
+                            //html2canvas library: https://html2canvas.hertzen.com/
                             html2canvas(exportPage[0] as HTMLElement, {
                                 useCORS: true
                             }).then(canvas => {
@@ -129,17 +132,17 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
     const overView = <>
-        <div>
-            <Accordion atomic={true}>
+        <AccordionContainer>
+            <Accordion atomic={false}>
                 {semesters.map((sem) =>
                     <AccordionItem title={sem}>
                         {Object.entries(courseSemestersMap).filter(([, semester]: any) => semester === sem).map(([course,]) =>
-                            <p>{course}</p>
+                            <p>{course.replace(/'/g, "")}</p>
                         )}
                     </AccordionItem>
                 )}
             </Accordion>
-        </div>
+        </AccordionContainer>
     </>
 
     return <>

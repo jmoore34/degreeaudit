@@ -7,7 +7,6 @@ export const WhiteSpaceBlock = styled.div`
     display: block;
 `
 
-
 export const Column = styled.div`
     display: flex;
     flex-direction: column;
@@ -35,3 +34,10 @@ export const Button = styled.button`
 export const Input = styled.input`
   height: 2rem;
 `;
+
+export const AccordionContainer = styled.div`
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    max-width: 95vw;
+`

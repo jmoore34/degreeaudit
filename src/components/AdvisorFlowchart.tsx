@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import {FlowchartBackground, FlowchartWrapper, FlowchartBox} from "./flowchart_components_in_common";
+import { FlowchartBackground, FlowchartWrapper, FlowchartBox } from "./flowchart_components_in_common";
 import { Rnd } from "react-rnd";
 import { useRerenderOnResizeAndOnScroll } from "../util";
 import axios from 'axios';
-import {BoxAnnotation} from "./BoxAnnotation";
-import {unathorizedMessage, useFlowchart} from "../useFlowchart";
-import {Column, Input, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
-import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
-import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
-import {enteredAdvisorPassword} from "../App";
+import { BoxAnnotation } from "./BoxAnnotation";
+import { unathorizedMessage, useFlowchart } from "../useFlowchart";
+import { Column, Input, Row, StyledSelect, WhiteSpaceBlock } from "./small_components";
+import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
+import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
+import { enteredAdvisorPassword } from "../App";
 
 const courseNamePrompt = "Enter the class name"
 
@@ -31,7 +31,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
-    const {flowchart, updateFlowchart} = useFlowchart(selectedFlowchart)
+    const { flowchart, updateFlowchart } = useFlowchart(selectedFlowchart)
 
     return <>
         <Row>
@@ -144,7 +144,7 @@ const resizeableBoxStyle = (circle: boolean) => ({
     justifyContent: "center",
     border: "solid 1px #ddd",
     backgroundColor: "rgba(217,51,118,0.3)",
-    borderRadius: circle ? "200%" :  "17.5%",
+    borderRadius: circle ? "200%" : "17.5%",
 });
 
 
@@ -171,8 +171,9 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
     // console.log(props.box)
     // console.log({x, y, width, height})
 
+    //https://github.com/bokuweb/react-rnd
     return <>
-            <Rnd
+        <Rnd
             ref={rndRef}
             size={{ width, height }}
             position={{ x, y }}
@@ -207,12 +208,12 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
 
         </Rnd>
         <BoxAnnotation boxHeight={height} style={{
-                top: (y + height) + "px",
-                left: x + "px",
-                width: width + "px",
-                textOverflow: "ellipsis",
-                overflowX: "hidden"
-            }}>{props.box.name.replace(/'/g, "")}
+            top: (y + height) + "px",
+            left: x + "px",
+            width: width + "px",
+            textOverflow: "ellipsis",
+            overflowX: "hidden"
+        }}>{props.box.name.replace(/'/g, "")}
         </BoxAnnotation>
     </>
 }

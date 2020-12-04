@@ -9,6 +9,8 @@ from flask_cors import CORS, cross_origin
 import os
 from passlib.hash import sha256_crypt
 
+# ^^Go through the above libraries and utilize pip install <libraryname> in the virtual environment to run the flask server
+
 UPLOAD_FOLDER = '../src/flowcharts'
 ALLOWED_EXTENSIONS = {'pdf', 'json'}
 JSON_FOLDER = Path('../src/json')
@@ -21,12 +23,14 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
 
+
 def change_password(newPassword):
     with open(PASSWORD_FILE, 'w') as f:
         f.write(sha256_crypt.encrypt(newPassword))
 
 # uncomment to set password
 #change_password("password goes here")
+
 
 def is_correct_password(password):
     if not path.exists(PASSWORD_FILE):
@@ -39,6 +43,8 @@ def is_correct_password(password):
 def has_filetype(filename, filetype):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() == filetype
+
+# Flask documentation about HTTP requests on Node.js servers w/ CORs middleware https://flask-cors.readthedocs.io/en/latest/
 
 
 @app.route('/api/pdf', methods=['GET', 'POST'])

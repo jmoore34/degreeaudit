@@ -17,7 +17,8 @@ function App() {
 
     return (
         <div className="App">
-            {enteredAdvisorPassword && modeSwitcherComponent} {/*show mode switcher only if advisor password entered*/}
+            {enteredAdvisorPassword && modeSwitcherComponent}
+            {/*show mode switcher only if advisor password entered*/}
             {mode === "student" ? <StudentFlowchart /> : <AdvisorFlowchart />}
         </div>
     );
