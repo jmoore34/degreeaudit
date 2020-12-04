@@ -1,14 +1,21 @@
 import React, { FunctionComponent, useState } from "react";
 import styled from "styled-components";
-import { CourseInfoBox } from "./CourseInfoBox";
-import {getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll} from "../util";
+import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
+import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
-import {BoxAnnotation} from "./BoxAnnotation";
-import {Button, Row, StyledSelect, WhiteSpaceBlock} from "./small_components";
-import {dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears} from "../dropdownData";
-import {useFlowchart} from "../useFlowchart";
-import {FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox} from "./flowchart_components_in_common";
-import {useSelectedMajorState, useSelectedYearState} from "../persistentStateHooks";
+import { BoxAnnotation } from "./BoxAnnotation";
+import { Button, Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
+import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
+import { useFlowchart } from "../useFlowchart";
+import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
+import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
+import { StyledRadioGroup } from "../App";
+// @ts-ignore
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+// @ts-ignore
+import { Accordion, AccordionItem } from 'react-light-accordion';
+import 'react-light-accordion/demo/css/index.css';
+
 
 const localStorageKey = "courseSemesters"
 // load the student's course->semester mappings from localStorage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
@@ -36,12 +43,12 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
-
+    const [mode, setMode] = useState("flowchart") // flowchart vs overview
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
     const { flowchart } = useFlowchart(selectedFlowchart)
 
-    return <>
+    const flowView = <>
         <div>
             <h1>Please color your classes according to which semester you plan on taking them</h1>
             <Row>
@@ -69,6 +76,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     if (exportPage) {
                         setSelectedCourse(null); // so that the CourseInfoBox is hidden
                         setTimeout(() => {
+                            //html2canvas library: https://html2canvas.hertzen.com/
                             html2canvas(exportPage[0] as HTMLElement, {
                                 useCORS: true
                             }).then(canvas => {
@@ -87,7 +95,8 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
             </Row>
         </div>
         <FlowchartWrapper className='exportImage' ref={ref}>
-            <CourseInfoBox flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
+            <CourseInfoBox
+                flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
                 onSemesterChanged={(newSemester: string) => {
                     const newMap = { ...courseSemestersMap, [selectedCourse]: newSemester }
@@ -99,22 +108,51 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                 onClose={() => {
                     setSelectedCourse('');
                 }}
+                catalogYear={selectedYear?.value}
+                major={selectedMajor?.value}
             />
             <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png"} />
             {flowchart.map(box => <>
-                    <HighlightBox box={box}
-                        color={getColorOfSemester(courseSemestersMap[box.name])}
-                        onClick={() => {
-                            setSelectedCourse(box.name);
-                        }}
-                    >
+                <HighlightBox box={box}
+                    color={getColorOfSemester(courseSemestersMap[box.name])}
+                    onClick={() => {
+                        setSelectedCourse(box.name);
+                    }}
+                >
 
-                    </HighlightBox>
-                    <BoxAnnotation boxHeight={0}>{courseSemestersMap[box.name]}</BoxAnnotation>
-                </>
+                </HighlightBox>
+                <BoxAnnotation boxHeight={0}>{courseSemestersMap[box.name]}</BoxAnnotation>
+            </>
             )}
         </FlowchartWrapper>
     </>
+
+    // @ts-ignore
+    const semesters = ["Taken", ...semesterGenerator()]
+    const overView = <>
+        <AccordionContainer>
+            <Accordion atomic={false}>
+                {semesters.map((sem) =>
+                    <AccordionItem title={sem}>
+                        {Object.entries(courseSemestersMap).filter(([, semester]: any) => semester === sem).map(([course,]) =>
+                            <p>{course.replace(/'/g, "")}</p>
+                        )}
+                    </AccordionItem>
+                )}
+            </Accordion>
+        </AccordionContainer>
+    </>
+
+    return <>
+        <br></br>
+        <StyledRadioGroup onChange={setMode} value={mode} horizontal>
+            <RadioButton value={"flowchart"}>Flowchart</RadioButton>
+            <RadioButton value={"overview"}>Overview</RadioButton>
+        </StyledRadioGroup>
+
+        {mode === "flowchart" ? flowView : overView}
+    </>
+
 
 
 }

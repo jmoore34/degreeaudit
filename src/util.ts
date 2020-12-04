@@ -1,10 +1,10 @@
-import {useEffect, useReducer} from "react";
-import {currentSemester} from "./components/CourseInfoBox";
+import { useEffect, useReducer } from "react";
+import { currentSemester } from "./components/CourseInfoBox";
 
 // react hook to rerender on window resize and on window scroll
 // TODO: Improve performance by not having causing a rerender on every single callback (e.g. waiting till the end, using a setTimeout, etc)
 export function useRerenderOnResizeAndOnScroll() {
-    const [, forceRerender] = useReducer(x => x+1, 0)
+    const [, forceRerender] = useReducer(x => x + 1, 0)
     useEffect(() => {
         window.addEventListener("resize", forceRerender)
         window.addEventListener("scroll", forceRerender)
@@ -22,7 +22,7 @@ export function renameSemester(semester: string): string {
     const semesterAbbreviatedYear = Number(semester.substring(semester.length - 2)) // e.g. Fall 20 -> 20
     // if the semester is in the past, set it to "Taken"; else, leave it the same
     if (semesterAbbreviatedYear < currentAbbreviatedYear // i.e, class was in 2018, ∴ in the past
-        || ( semesterAbbreviatedYear === currentAbbreviatedYear
+        || (semesterAbbreviatedYear === currentAbbreviatedYear
             && (
                 (currentSemester.includes("Fa") && !semester.includes("Fa"))   // e.g. currently Fall semester, class was this year in the Spring or Summer, ∴ in the past
                 || (currentSemester.includes("Su") && semester.includes("Sp")) // i.e. currently Summer semester, class was the Spring right before, ∴ in the past
