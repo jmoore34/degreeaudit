@@ -6,3 +6,5 @@ import createPersistedState from "use-persisted-state";
 
 export const useSelectedMajorState = createPersistedState('major')
 export const useSelectedYearState = createPersistedState('year')
+
+export const useNicknameMapState = createPersistedState('nicknameMap')

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { BoxAnnotation } from "./BoxAnnotation";
 import { unathorizedMessage, useFlowchart } from "../useFlowchart";
 import { Column, Input, Row, StyledSelect, WhiteSpaceBlock } from "./small_components";
-import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
+import { dropdownDefaultMajor, advisorDropdownDefaultYear, DropdownItem, dropdownMajors, advisorDropdownYears } from "../dropdownData";
 import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
 import { enteredAdvisorPassword } from "../App";
 import {ensureNameUnique, getReadableCourseName} from "../regex";
@@ -21,7 +21,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     useRerenderOnResizeAndOnScroll()
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
-    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
+    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(advisorDropdownDefaultYear)
 
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
@@ -44,7 +44,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                         onChange={(newVal: any) => {
                             setSelectedYear(newVal)
                         }}
-                        options={dropdownYears}
+                        options={advisorDropdownYears}
                     />
                 </Row>
             </Column>
