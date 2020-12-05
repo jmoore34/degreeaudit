@@ -1,11 +1,4 @@
 import os
-from passlib.hash import sha256_crypt
-
-PASSWORD_FILE = '../PASSWORD_HASH_DO_NOT_COMMIT'
-
-def change_password(newPassword):
-    with open(PASSWORD_FILE, 'w') as f:
-        f.write(sha256_crypt.hash(newPassword))
 
 # uncomment to set password
 #change_password("password goes here")
@@ -13,6 +6,15 @@ def change_password(newPassword):
 print("Installing dependencies...")
 print(" Running: pip3 install -r requirements.txt")
 os.system("pip3 install -r requirements.txt")
+
+
+from passlib.hash import sha256_crypt
+
+PASSWORD_FILE = '../PASSWORD_HASH_DO_NOT_COMMIT'
+
+def change_password(newPassword):
+    with open(PASSWORD_FILE, 'w') as f:
+        f.write(sha256_crypt.hash(newPassword))
 
 print("Enter the advisor password:")
 password = input()
