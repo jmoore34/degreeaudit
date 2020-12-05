@@ -150,7 +150,6 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
                     <li>080 Social and Behavioral Sciences (3 semester credit hours)</li>
                     <li>090 Component Area Option (6 semester credit hours)</li>
                 </ul>
-                <h3>Go here for more information</h3>
                 <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/curriculum/core-curriculum"}>Go here for more information</a>
             </>
     }

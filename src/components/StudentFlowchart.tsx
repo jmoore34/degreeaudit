@@ -15,6 +15,11 @@ import { RadioGroup, RadioButton } from 'react-radio-buttons';
 // @ts-ignore
 import { Accordion, AccordionItem } from 'react-light-accordion';
 import 'react-light-accordion/demo/css/index.css';
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import DialogActions from "@material-ui/core/DialogActions/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 
 
 const localStorageKey = "courseSemesters"
@@ -45,7 +50,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
     const [mode, setMode] = useState("flowchart") // flowchart vs overview
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
-
+    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const { flowchart } = useFlowchart(selectedFlowchart)
 
     const flowView = <>
@@ -92,6 +97,10 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     }
 
                 }}>Export PDF as Image</Button>
+                <Button onClick={() => {
+                    setConfirmDialogOpen(true)
+                }}>Clear</Button>
+
             </Row>
         </div>
         <FlowchartWrapper className='exportImage' ref={ref}>
@@ -151,6 +160,34 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
         </StyledRadioGroup>
 
         {mode === "flowchart" ? flowView : overView}
+
+
+        <Dialog
+            open={confirmDialogOpen}
+            onClose={() => setConfirmDialogOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{"Clear course history"}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete all your classes in all your flowcharts?
+                                                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setConfirmDialogOpen(false)} color="primary" autoFocus>
+                    Cancel
+                           </Button>
+                <Button onClick={() => {
+                    setCourseSemesters({})
+                    localStorage.setItem(localStorageKey, "{}");
+                    setConfirmDialogOpen(false)
+                }}
+                    color="secondary">
+                    Delete
+                            </Button>
+            </DialogActions>
+        </Dialog>
     </>
 
 
