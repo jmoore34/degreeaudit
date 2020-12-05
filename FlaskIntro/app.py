@@ -17,7 +17,23 @@ JSON_FOLDER = Path('../src/json')
 
 PASSWORD_FILE = '../PASSWORD_HASH_DO_NOT_COMMIT'
 
-app = Flask(__name__)
+# Reference used: https://blog.miguelgrinberg.com/post/how-to-deploy-a-react--flask-project
+# -----------------------
+# **  DEPLOYMENT NOTE  **
+# -----------------------
+# The arguments static_folder and static_url_path below make Flask serve the React app
+# You need to run yarn build for this to work
+# Also, UTD may decide to deploy the React app separately from the Flask app
+# depending on their web infrastructure (Apache, etc.)
+#
+# UTD OIT STAFF: Change the line below to Flask(__name__) to disable Flask statically serving the React app
+# (and also delete the '/' route below it)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
