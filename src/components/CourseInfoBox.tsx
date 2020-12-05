@@ -5,7 +5,7 @@ import Color from "color";
 import { FlowchartBox } from "./flowchart_components_in_common";
 import { getColorOfSemester } from "../util";
 import {getUrlReadyCourseName} from "../regex";
-import {TextField} from "@material-ui/core";
+import {TextField, Button} from "@material-ui/core";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
@@ -223,12 +223,13 @@ export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
 
     return <>
         <InfoBox flowchartBox={props.flowchartBox}>
-            <button
+            <Button
+                variant="contained"
                 onClick={() => {
                     props.onClose();
                 }}>
                 Close
-            </button>
+            </Button>
             <IFrameWrapper>
                 {view}
             </IFrameWrapper>
