@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
+import {CourseInfoBox, currentSemester, semesterGenerator} from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
 import { BoxAnnotation, BoxAnnotationText } from "./BoxAnnotation";
@@ -104,7 +104,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                                 //document.body.appendChild(canvas)
                                 var link = document.createElement("a");
                                 document.body.appendChild(link);
-                                link.download = "html_image.png";
+                                link.download = "flowchart.png";
                                 link.href = canvas.toDataURL("image/png");
                                 link.target = '_blank';
                                 link.click();
