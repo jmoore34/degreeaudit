@@ -23,3 +23,8 @@ change_password(password)
 
 print(f"Password changed to '{password}'. Advisor view (keep secret - do not share with students) available at https://ecsadvising.utdallas.edu/degreeaudit/#{password}")
 print(f"Student view accessible at https://ecsadvising.utdallas.edu/degreeaudit/")
+
+print("")
+
+print("The flask application can serve the React application -- make sure to do `yarn build` first")
+print("(`yarn start` can still be used for development builds")
