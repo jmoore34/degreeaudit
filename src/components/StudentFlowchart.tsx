@@ -4,7 +4,7 @@ import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
 import { BoxAnnotation } from "./BoxAnnotation";
-import {  Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
+import { Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
 import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
 import { useFlowchart } from "../useFlowchart";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
@@ -21,6 +21,8 @@ import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+//@ts-ignore
+import html2PDF from 'jspdf-html2canvas';
 
 
 const localStorageKey = "courseSemesters"
@@ -72,7 +74,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     }}
                     options={dropdownYears}
                 />
-                <WhiteSpaceBlock/>
+                <WhiteSpaceBlock />
                 <Button variant="contained" onClick={() => {
 
                     const exportPage = document.getElementsByClassName("exportImage");
@@ -97,8 +99,36 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                         }, 50); // hack: give the page a change to rerender before taking the screenshot
                     }
 
-                }}>Export PDF as Image</Button>
-                <WhiteSpaceBlock size="1em"/>
+                }}>Export as Image</Button>
+                <WhiteSpaceBlock size="1em" />
+                <Button variant="contained" onClick={() => {
+
+                    const exportPage = document.getElementsByClassName("exportImage");
+
+                    console.log(exportPage)
+
+                    if (exportPage) {
+                        setSelectedCourse(null); // so that the CourseInfoBox is hidden
+                        setTimeout(() => {
+                            //html2canvas library: https://html2canvas.hertzen.com/
+
+                            //document.body.appendChild(canvas)
+                            html2PDF(exportPage, {
+                                html2canvas: {
+                                    useCORS: true
+                                },
+                                jsPDF: {
+                                    format: 'a4',
+                                },
+                                imageType: 'image/jpeg',
+                                output: 'flowchart.pdf'
+                            });
+
+                        }, 50); // hack: give the page a change to rerender before taking the screenshot
+                    }
+
+                }}>Export as PDF</Button>
+                <WhiteSpaceBlock size="1em" />
                 <Button variant="contained" color="secondary" onClick={() => {
                     setConfirmDialogOpen(true)
                 }}>Clear</Button>
