@@ -157,6 +157,8 @@ export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
 
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
+
+    // view -- variable content that depends on course type
     let view =
         <CourseFrame src={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/courses/" + getUrlReadyCourseName(course)} height="400" width="600" scrolling="no"></CourseFrame>
     if (course.includes('core')) {

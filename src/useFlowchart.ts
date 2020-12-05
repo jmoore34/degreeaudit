@@ -3,11 +3,13 @@ import axios from "axios";
 import {FlowchartBox} from "./components/flowchart_components_in_common";
 import {enteredAdvisorPassword} from "./App";
 
+// what the hook below returns
 interface useFlowchartReturn {
     flowchart: Array<FlowchartBox>,
     updateFlowchart: (newFlowchart: Array<FlowchartBox>) => void
 }
 
+// given a flowchart name, a hook that fetches the corresponding flowchart data from the server
 export function useFlowchart(flowchartName: string): useFlowchartReturn {
     const [flowchart, __setFlowchart] = useState<Array<FlowchartBox>>([])
 

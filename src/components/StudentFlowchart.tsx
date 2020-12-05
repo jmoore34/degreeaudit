@@ -26,12 +26,7 @@ import { RadioGroup, RadioButton } from 'react-radio-buttons';
 // @ts-ignore
 import { Accordion, AccordionItem } from 'react-light-accordion';
 import 'react-light-accordion/demo/css/index.css';
-import Dialog from "@material-ui/core/Dialog/Dialog";
-import Button from "@material-ui/core/Button/Button";
-import DialogActions from "@material-ui/core/DialogActions/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import {Dialog, Button, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core"
 //@ts-ignore
 import html2PDF from 'jspdf-html2canvas';
 import Color from "color";
@@ -52,10 +47,10 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(studentDropdownDefaultYear)
-    const [mode, setMode] = useState("flowchart") // flowchart vs overview
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
-    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-    const { flowchart } = useFlowchart(selectedFlowchart)
+    const [mode, setMode] = useState("flowchart") // flowchart vs overview
+    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false); // used for the confirm clear all dialog
+    const { flowchart } = useFlowchart(selectedFlowchart) // gets the selected flowchart from the server
 
     const flowView = <>
         <div>
@@ -210,10 +205,10 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">{"Clear course history"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Clear course plan"}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to delete all your classes in all your flowcharts?
+                    Are you sure you want to delete all your class selections in all your flowcharts?
                                                 </DialogContentText>
             </DialogContent>
             <DialogActions>

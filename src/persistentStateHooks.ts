@@ -3,6 +3,7 @@ import createPersistedState from "use-persisted-state";
 import {renameSemester} from "./util";
 import {useEffect} from "react";
 
+// ************ read here ******************/
 // basically useState but persistent
 // see here https://github.com/donavon/use-persisted-state
 
@@ -27,6 +28,7 @@ export function useSemesterMapState(): [any, (newMap: any) => void] {
         for (const [course, semester] of Object.entries(semesterMap)) {
             if (course && semester) {
                 result[course] = renameSemester(semester as string)
+                // (renameSemester leaves non-old semesters alone)
             }
         }
         setSemesterMap(result)

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -21,7 +24,7 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/uploadAPI" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
@@ -29,12 +32,11 @@
     <list default="true" id="857c1ea1-d72f-423b-a436-ba2f97d0aef5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/CourseInfoBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CourseInfoBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Flowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StudentFlowchart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/flowchart_components_in_common.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/flowchart_components_in_common.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/json/CS2019.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/json/CS2019.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/json/CS2020.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/json/CS2020.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StudentFlowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StudentFlowchart.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/small_components.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/small_components.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/persistentStateHooks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/persistentStateHooks.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/useFlowchart.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/useFlowchart.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,11 +55,12 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="uploadAPI" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1jRXkRUT1eQuOfDA2ac2c72au6P" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -89,6 +92,7 @@
       <updated>1603768025502</updated>
       <workItem from="1603768035279" duration="97000" />
       <workItem from="1606514265864" duration="4901000" />
+      <workItem from="1607126847516" duration="16100000" />
     </task>
     <task id="LOCAL-00001" summary="Advisor flowchart: fix circular dependency and improve annotations">
       <created>1606781060925</created>
@@ -111,7 +115,119 @@
       <option name="project" value="LOCAL" />
       <updated>1606789176057</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Add password hash file to .gitignore">
+      <created>1607028181528</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1607028181529</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Cosmetic fixes&#10;&#10;Flowchart updates&#10;Remove unneeded text in student flowchart">
+      <created>1607028265829</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1607028265829</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add setup.py">
+      <created>1607028293497</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1607028293497</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add setup.py and requirements.txt">
+      <created>1607029030698</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1607029030698</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Material buttons (ﾉ´ヮ´)ﾉ*:･ﾟ✧">
+      <created>1607130597881</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1607130597881</updated>
+    </task>
+    <task id="LOCAL-00009" summary="setup.py fix">
+      <created>1607131194310</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1607131194310</updated>
+    </task>
+    <task id="LOCAL-00010" summary="React app now deployable from flask - make sure to run `yarn build`">
+      <created>1607132960402</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1607132960402</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Regex refactor for improved handling of course names">
+      <created>1607135276979</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1607135276979</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Remove unused code">
+      <created>1607135873618</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1607135873618</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Course nickname &amp; modified dropdown functionality">
+      <created>1607139314305</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1607139314305</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Course nickname &amp; modified dropdown functionality">
+      <created>1607140123779</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1607140123779</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Change png export filename">
+      <created>1607143875034</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1607143875034</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Course nickname enforced uppercase">
+      <created>1607144060936</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1607144060936</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Cores list style update">
+      <created>1607144746726</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1607144746726</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Use MUI button in CourseInfoBox.tsx">
+      <created>1607145206711</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1607145206711</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Refactor StudentFlowchart.tsx semester map code">
+      <created>1607146267795</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1607146267795</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,7 +238,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -136,9 +264,29 @@
     <MESSAGE value="Advisor flowchart: fix circular dependency and improve annotations" />
     <MESSAGE value="Add flowchart switching to student flowchart (required refactoring)" />
     <MESSAGE value="Persistent dropdown selections" />
-    <option name="LAST_COMMIT_MESSAGE" value="Persistent dropdown selections" />
+    <MESSAGE value="Add password hash file to .gitignore" />
+    <MESSAGE value="Cosmetic fixes&#10;&#10;Flowchart updates&#10;Remove unneeded text in student flowchart" />
+    <MESSAGE value="Add setup.py" />
+    <MESSAGE value="Add req" />
+    <MESSAGE value="Add setup.py and requirements.txt" />
+    <MESSAGE value="Material buttons (ﾉ´ヮ´)ﾉ*:･ﾟ✧" />
+    <MESSAGE value="setup.py fix" />
+    <MESSAGE value="React app now deployable from flask - make sure to run `yarn build`" />
+    <MESSAGE value="Regex refactor for improved handling of course names" />
+    <MESSAGE value="Remove unused code" />
+    <MESSAGE value="Course nickname &amp; modified dropdown functionality" />
+    <MESSAGE value="Change png export filename" />
+    <MESSAGE value="Course nickname enforced uppercase" />
+    <MESSAGE value="Cores list style update" />
+    <MESSAGE value="Use MUI button in CourseInfoBox.tsx" />
+    <MESSAGE value="Refactor StudentFlowchart.tsx semester map code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor StudentFlowchart.tsx semester map code" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1607146892175">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1607146892175" />
     <state x="0" y="20" width="2560" height="1369" key="MergeDialog" timestamp="1606532308642">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -151,17 +299,21 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1071" y="402" key="RollbackChangesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1606533436824" />
-    <state x="872" y="432" key="Vcs.Push.Dialog.v2" timestamp="1606785066224">
+    <state x="872" y="432" key="Vcs.Push.Dialog.v2" timestamp="1607146270629">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="872" y="432" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1606785066224" />
+    <state x="872" y="432" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1607146270629" />
     <state x="1101" y="103" width="1168" height="946" key="dock-window-1" timestamp="1606787912817">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1101" y="103" width="1168" height="946" key="dock-window-1/0.0.2560.1400@0.0.2560.1400" timestamp="1606787912817" />
-    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1606788000525">
+    <state x="987" y="433" width="600" height="534" key="find.popup" timestamp="1607146972992">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1606788000525" />
+    <state x="987" y="433" width="600" height="534" key="find.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1607146972992" />
+    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup" timestamp="1607138531652">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1583" y="320" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1607138531652" />
   </component>
 </project>
