@@ -14,7 +14,12 @@ import {
 } from "../dropdownData";
 import { useFlowchart } from "../useFlowchart";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
-import { useNicknameMapState, useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
+import {
+    useNicknameMapState,
+    useSelectedMajorState,
+    useSelectedYearState,
+    useSemesterMapState
+} from "../persistentStateHooks";
 import { StyledRadioGroup } from "../App";
 // @ts-ignore
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
@@ -32,26 +37,9 @@ import html2PDF from 'jspdf-html2canvas';
 import Color from "color";
 
 
-const localStorageKey = "courseSemesters"
-// load the student's course->semester mappings from localStorage (https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage),
-// defaulting to an empty map
-const initialSemesterMap = JSON.parse(localStorage.getItem(localStorageKey) ?? "{}") ?? {}
-// postprocess this map to rename past semesters (e.g. "Fall 2015") to "Taken"
-function postprocessSemesterMap(semesterMap: any) {
-    let result: any = {};
-    for (const [course, semester] of Object.entries(semesterMap)) {
-        if (course && semester) {
-            result[course] = renameSemester(semester as string)
-        }
-    }
-    return result
-}
-const postprocessedInitialSemesterMap = postprocessSemesterMap(initialSemesterMap)
-
-
 export const StudentFlowchart: FunctionComponent<{}> = () => {
     // map of courses to the semester the student plans to take them
-    const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
+    const [courseSemestersMap, setCourseSemesters]: any = useSemesterMapState()
     // course selected / to be shown in CourseInfoBox
     const [selectedCourse, setSelectedCourse]: any = useState("");
     // map of courses to a "nick name"
@@ -154,9 +142,6 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                 semester={courseSemestersMap[selectedCourse]}
                 onSemesterChanged={(newSemester: string) => {
                     const newMap = { ...courseSemestersMap, [selectedCourse]: newSemester }
-                    //Local Storage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-                    localStorage.setItem(localStorageKey, JSON.stringify(newMap));
-                    //console.log(localStorage.getItem(localStorageKey));
                     setCourseSemesters(newMap);
                 }}
                 onClose={() => {
@@ -237,7 +222,6 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                            </Button>
                 <Button onClick={() => {
                     setCourseSemesters({})
-                    localStorage.setItem(localStorageKey, "{}");
                     setConfirmDialogOpen(false)
                 }}
                     color="secondary">
