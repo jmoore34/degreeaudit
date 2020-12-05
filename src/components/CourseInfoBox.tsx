@@ -149,7 +149,7 @@ export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
         <br /> <br />
         <TextField
             value={props.courseNickName ?? ""}
-            onChange={e => props.setCourseNickName(e.target.value)}
+            onChange={e => props.setCourseNickName(e.target.value.toUpperCase())}
             variant="outlined"
             label="Selected course"
         />
