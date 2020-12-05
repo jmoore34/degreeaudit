@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from "react";
-import styled from "styled-components";
 import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
@@ -41,7 +40,6 @@ const postprocessedInitialSemesterMap = postprocessSemesterMap(initialSemesterMa
 
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
-    const ref = React.useRef(null)
     const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
     const [selectedCourse, setSelectedCourse]: any = useState("");
 
@@ -105,7 +103,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
 
             </Row>
         </div>
-        <FlowchartWrapper className='exportImage' ref={ref}>
+        <FlowchartWrapper className='exportImage'>
             <CourseInfoBox
                 flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
