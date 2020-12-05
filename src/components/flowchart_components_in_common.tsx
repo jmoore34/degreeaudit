@@ -45,5 +45,5 @@ export const FlowchartWrapper = styled.div`
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    margin-top: 2em;
+    margin-top: 2em;  
 `;
