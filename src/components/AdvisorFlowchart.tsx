@@ -9,17 +9,11 @@ import { Column, Input, Row, StyledSelect, WhiteSpaceBlock } from "./small_compo
 import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
 import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
 import { enteredAdvisorPassword } from "../App";
+import {ensureNameUnique, getReadableCourseName} from "../regex";
 
 const courseNamePrompt = "Enter the class name"
 
 
-// Given a name, returns a modified version of the name that is sure to be unique
-const CHAR_TO_APPEND_TO_NAMES = "'"
-function ensureNameUnique(name: string, existingNames: Array<string>) {
-    while (existingNames.includes(name))
-        name += CHAR_TO_APPEND_TO_NAMES
-    return name
-}
 
 export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const flowchartRef = React.useRef(null)
@@ -213,7 +207,7 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
             width: width + "px",
             textOverflow: "ellipsis",
             overflowX: "hidden"
-        }}>{props.box.name.replace(/'/g, "")}
+        }}>{getReadableCourseName(props.box.name)}
         </BoxAnnotation>
     </>
 }

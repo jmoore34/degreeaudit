@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Color from "color";
 import { FlowchartBox } from "./flowchart_components_in_common";
 import { getColorOfSemester } from "../util";
+import {getUrlReadyCourseName} from "../regex";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
@@ -134,7 +135,7 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
     let view =
-        <CourseFrame src={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/courses/" + course.toLowerCase().replace(/[ ']/g, "")} height="400" width="600" scrolling="no"></CourseFrame>
+        <CourseFrame src={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/courses/" + getUrlReadyCourseName(course)} height="400" width="600" scrolling="no"></CourseFrame>
     if (course.includes('core')) {
         view =
             <>
