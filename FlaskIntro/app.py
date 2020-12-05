@@ -96,18 +96,20 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and has_filetype(file.filename, "pdf"):
-            filename = secure_filename(file.filename)
+        if file and has_filetype(file.filename, "pdf") and request.form["flowchartName"]:
+            filename = secure_filename(request.form["flowchartName"] + ".pdf") # name sanitized here
+            print(f"Upload file: {file.filename} (rename to {filename})")
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print(UPLOAD_FOLDER + '/' + filename)
 
+            print("Starting conversion...")
             images = convert_from_path(UPLOAD_FOLDER + '/' + filename)
             for img in images:
-                img.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'png')))
-
-            os.remove(UPLOAD_FOLDER + '/' + filename)
+                img_path = os.path.join(app.config['UPLOAD_FOLDER'], filename.replace('pdf', 'png'))
+                img.save(img_path)
+            print(f"Conversion complete. Saved to {img_path}")
+            os.remove(UPLOAD_FOLDER + '/' + filename) # delete image now that pdf is saved
             return "ok"
 
 

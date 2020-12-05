@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import React, {FunctionComponent, useEffect, useReducer, useRef, useState} from "react";
 import { FlowchartBackground, FlowchartWrapper, FlowchartBox } from "./flowchart_components_in_common";
 import { Rnd } from "react-rnd";
 import { useRerenderOnResizeAndOnScroll } from "../util";
@@ -10,6 +10,7 @@ import { dropdownDefaultMajor, advisorDropdownDefaultYear, DropdownItem, dropdow
 import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
 import { enteredAdvisorPassword } from "../App";
 import {ensureNameUnique, getReadableCourseName} from "../regex";
+import {Button} from "@material-ui/core";
 
 const courseNamePrompt = "Enter the class name"
 
@@ -26,6 +27,11 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
     const { flowchart, updateFlowchart } = useFlowchart(selectedFlowchart)
+
+    // appended to the src of the flowchart image
+    // incremented on image uploads
+    // ∴ forces image rerender when a new flowchart image is uploaded
+    const [flowchartImageVersion, incrementFlowchartImageVersion] = useReducer( (old: number) => old + Math.random(), Math.random())
 
     return <>
         <Row>
@@ -51,15 +57,23 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             <Column><WhiteSpaceBlock /></Column>
             <Column>
                 <h2>Replace current flowchart's PDF</h2>
-                <form method='post' encType='multipart/form-data'>
-                    <Input
+                {/* https://kiranvj.com/blog/blog/file-upload-in-material-ui/ */ }
+                <label>
+                    <input
+                        style={{display: "none"}} // gives functionality, but MUI button is what user actually sees
                         type='file'
                         name='upload'
+                        id="upload"
                         onChange={async (e) => {
                             if (e.target.files && e.target.files[0]) {
+                                if (e.target.files[0].type !== "application/pdf") {
+                                    alert("Error: Expected a PDF file")
+                                    return
+                                }
                                 var formData = new FormData();
                                 formData.append("file", e.target.files[0]);
                                 formData.append("password", enteredAdvisorPassword);
+                                formData.append("flowchartName", selectedFlowchart.replace(" ", ""))
                                 const response = axios.post('http://127.0.0.1:5000/api/pdf', formData, {
                                     headers: {
                                         'Content-Type': 'multipart/form-data'
@@ -67,8 +81,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                                 }).then(() => {
                                     console.log("Then");
                                     const year = selectedYear;
-                                    setSelectedYear(null);
-                                    setSelectedYear(year);
+                                    incrementFlowchartImageVersion()
                                 }).catch((err) => {
                                     if (err && err.message && err.message.includes("401"))
                                         alert(unathorizedMessage)
@@ -78,11 +91,14 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                             }
                         }}
                     />
-                </form>
+                    <Button variant="contained" component="span">
+                        Upload flowchart
+                    </Button>
+                </label>
             </Column>
         </Row>
         <FlowchartWrapper ref={flowchartRef}>
-            <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png"}
+            <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png" + `?ver=${flowchartImageVersion}`}
                 onLoad={() => setFlowchartElement(flowchartRef.current)}
                 onContextMenu={e => {
                     e.preventDefault()

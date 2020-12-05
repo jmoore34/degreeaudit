@@ -31,6 +31,8 @@ import {Dialog, Button, DialogActions, DialogContent, DialogContentText, DialogT
 import html2PDF from 'jspdf-html2canvas';
 import Color from "color";
 
+// Used to reset image cache on page load in case advisors have changed flowchart images
+const flowchartImageVersion = Math.random()
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
     // map of courses to the semester the student plans to take them
@@ -150,7 +152,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     setNicknameMap(newMap)
                 }}
             />
-            <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png"} />
+            <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + `.png?ver=${flowchartImageVersion}`} />
             {flowchart.map(box => <>
                 <HighlightBox box={box}
                     color={getColorOfSemester(courseSemestersMap[box.name])}
