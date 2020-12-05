@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import Select from "react-select";
 
-export const WhiteSpaceBlock = styled.div`
-    min-width: 3em;
-    max-width: 20vw;
+export const WhiteSpaceBlock = styled.div<{size?: string}>`
+    width: ${ props => props.size ?? "3em" };
     display: block;
 `
 

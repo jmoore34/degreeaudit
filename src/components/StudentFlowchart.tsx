@@ -4,7 +4,7 @@ import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
 import { BoxAnnotation } from "./BoxAnnotation";
-import { Button, Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
+import {  Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
 import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
 import { useFlowchart } from "../useFlowchart";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
@@ -16,6 +16,7 @@ import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { Accordion, AccordionItem } from 'react-light-accordion';
 import 'react-light-accordion/demo/css/index.css';
 import Dialog from "@material-ui/core/Dialog/Dialog";
+import Button from "@material-ui/core/Button/Button";
 import DialogActions from "@material-ui/core/DialogActions/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText/DialogContentText";
@@ -71,8 +72,8 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     }}
                     options={dropdownYears}
                 />
-                <WhiteSpaceBlock />
-                <Button onClick={() => {
+                <WhiteSpaceBlock/>
+                <Button variant="contained" onClick={() => {
 
                     const exportPage = document.getElementsByClassName("exportImage");
 
@@ -97,7 +98,8 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     }
 
                 }}>Export PDF as Image</Button>
-                <Button onClick={() => {
+                <WhiteSpaceBlock size="1em"/>
+                <Button variant="contained" color="secondary" onClick={() => {
                     setConfirmDialogOpen(true)
                 }}>Clear</Button>
 
