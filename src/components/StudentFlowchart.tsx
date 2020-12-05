@@ -1,14 +1,20 @@
 import React, { FunctionComponent, useState } from "react";
-import styled from "styled-components";
 import { CourseInfoBox, semesterGenerator } from "./CourseInfoBox";
 import { getColorOfSemester, renameSemester, useRerenderOnResizeAndOnScroll } from "../util";
 import html2canvas from "html2canvas";
-import { BoxAnnotation } from "./BoxAnnotation";
+import { BoxAnnotation, BoxAnnotationText } from "./BoxAnnotation";
 import { Row, StyledSelect, WhiteSpaceBlock, AccordionContainer } from "./small_components";
-import { dropdownDefaultMajor, dropdownDefaultYear, DropdownItem, dropdownMajors, dropdownYears } from "../dropdownData";
+import {
+    dropdownDefaultMajor,
+    advisorDropdownDefaultYear,
+    DropdownItem,
+    dropdownMajors,
+    advisorDropdownYears,
+    studentDropdownYears, studentDropdownDefaultYear
+} from "../dropdownData";
 import { useFlowchart } from "../useFlowchart";
 import { FlowchartBackground, FlowchartBox, FlowchartWrapper, HighlightBox } from "./flowchart_components_in_common";
-import { useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
+import { useNicknameMapState, useSelectedMajorState, useSelectedYearState } from "../persistentStateHooks";
 import { StyledRadioGroup } from "../App";
 // @ts-ignore
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
@@ -23,6 +29,7 @@ import DialogContentText from "@material-ui/core/DialogContentText/DialogContent
 import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 //@ts-ignore
 import html2PDF from 'jspdf-html2canvas';
+import Color from "color";
 
 
 const localStorageKey = "courseSemesters"
@@ -43,14 +50,20 @@ const postprocessedInitialSemesterMap = postprocessSemesterMap(initialSemesterMa
 
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
-    const ref = React.useRef(null)
+    // map of courses to the semester the student plans to take them
     const [courseSemestersMap, setCourseSemesters]: any = useState(postprocessedInitialSemesterMap);
+    // course selected / to be shown in CourseInfoBox
     const [selectedCourse, setSelectedCourse]: any = useState("");
+    // map of courses to a "nick name"
+    // in practice, this is used for giving more specific selections to cores, electives, etc.
+    // e.g. this allows a student to assign LIT 1302 to a core
+    const [nicknameMap, setNicknameMap]: any = useNicknameMapState({})
 
+    // hook to make the page responsive to resize
     useRerenderOnResizeAndOnScroll()
 
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
-    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(dropdownDefaultYear)
+    const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(studentDropdownDefaultYear)
     const [mode, setMode] = useState("flowchart") // flowchart vs overview
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -72,7 +85,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     onChange={(newVal: any) => {
                         setSelectedYear(newVal)
                     }}
-                    options={dropdownYears}
+                    options={studentDropdownYears}
                 />
                 <WhiteSpaceBlock />
                 <Button variant="contained" onClick={() => {
@@ -135,7 +148,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
 
             </Row>
         </div>
-        <FlowchartWrapper className='exportImage' ref={ref}>
+        <FlowchartWrapper className='exportImage'>
             <CourseInfoBox
                 flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
@@ -151,6 +164,11 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                 }}
                 catalogYear={selectedYear?.value}
                 major={selectedMajor?.value}
+                courseNickName={nicknameMap[selectedCourse]}
+                setCourseNickName={(nickName: string) => {
+                    const newMap = { ...nicknameMap, [selectedCourse]: nickName }
+                    setNicknameMap(newMap)
+                }}
             />
             <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png"} />
             {flowchart.map(box => <>
@@ -162,7 +180,14 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                 >
 
                 </HighlightBox>
-                <BoxAnnotation boxHeight={0}>{courseSemestersMap[box.name]}</BoxAnnotation>
+                <BoxAnnotation boxHeight={0}>
+                    <BoxAnnotationText>
+                        {nicknameMap[box.name]}
+                    </BoxAnnotationText>
+                    <BoxAnnotationText color={Color(getColorOfSemester(courseSemestersMap[box.name])).darken(0.7).toString()}>
+                        {courseSemestersMap[box.name] ?? ""}
+                    </BoxAnnotationText>
+                </BoxAnnotation>
             </>
             )}
         </FlowchartWrapper>

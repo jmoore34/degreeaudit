@@ -5,12 +5,13 @@ import Color from "color";
 import { FlowchartBox } from "./flowchart_components_in_common";
 import { getColorOfSemester } from "../util";
 import {getUrlReadyCourseName} from "../regex";
+import {TextField} from "@material-ui/core";
 
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
     z-index: 10;
     position: absolute;
-    background-color: rgba(255,255,255,0.85);
+    background-color: rgba(255,255,255,0.97);
     border: 1px solid black;
     width: 40rem;
     top: calc(${props => props.flowchartBox.top}% + 5%);
@@ -125,12 +126,34 @@ export function generateMajorURL(major: string) {
     return majorURL
 }
 
-export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | null, onSemesterChanged: (newSemester: string) => any, semester: string, onClose: () => void, catalogYear: string, major: string }> = (props) => {
+interface CourseInfoBoxProps {
+    flowchartBox: FlowchartBox | null
+    onSemesterChanged: (newSemester: string) => any
+    semester: string
+    onClose: () => void
+    catalogYear: string
+    major: string
+    courseNickName: string | undefined | null
+    setCourseNickName: (nickName: string) => any
+}
+
+export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
     if (!props.flowchartBox) {
         return <></>
     }
 
-    const course = props.flowchartBox.name
+    const course = props.flowchartBox.name.toLowerCase()
+
+    // only shown on categorical (e.g. "Core"), courses, not concrete courses like MATH 2413
+    const nicknameInput = <>
+        <br /> <br />
+        <TextField
+            value={props.courseNickName ?? ""}
+            onChange={e => props.setCourseNickName(e.target.value)}
+            variant="outlined"
+            label="Selected course"
+        />
+    </>
 
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
@@ -152,6 +175,7 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
                     <li>090 Component Area Option (6 semester credit hours)</li>
                 </ul>
                 <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/curriculum/core-curriculum"}>Go here for more information</a>
+                {nicknameInput}
             </>
     }
     else if (course.includes('free')) {
@@ -161,32 +185,36 @@ export const CourseInfoBox: FunctionComponent<{ flowchartBox: FlowchartBox | nul
                     Most classes can be used to satisfy free electives. Courses with STAT and ITSS prefixes cannot be used to satisfy free electives.
                     Math classes below MATH 2413 and classes equivalent to those you have already taken also cannot be used to satisfy free electives."
                 </p>
-
+                {nicknameInput}
             </>
     }
     else if (course.includes('guided')) {
         view =
             <>
-                <br></br>
+                <br/>
                 <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/programs/ecs/" + generateMajorURL(props.major)}>To get a list of guided electives click here and scroll down to Major Guided Electives</a>
+                {nicknameInput}
             </>
     }
     else if (course.includes('prescribed')) {
         if (props.major === 'bmen') {
             view =
                 <>
-                    <br></br>
+                    <br/>
                     <p>
                         Students pursuing the general program take 9 semester credit hours using any other BMEN 3000 level or higher class or any other
                         upper division engineering course with approval from the department. Students must document 9 semester credit hours of
                         engineering content for these to count towards their degree.
-                </p>
+                    </p>
+                    {nicknameInput}
                 </>
         }
         else {
             view =
                 <>
+                    <br/>
                     <a href={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/programs/ecs/" + generateMajorURL(props.major)}>To get a list of guided electives click here and scroll down to Major Prescribed Electives</a>
+                    {nicknameInput}
                 </>
         }
     }

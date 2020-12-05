@@ -8,3 +8,8 @@ export const BoxAnnotation = styled.div<{ boxHeight: number }>`
   color: black;
   float: left;
 `;
+
+export const BoxAnnotationText = styled.div<{color?: string}>`
+  color: ${props => props.color ?? "black"};
+  display: block
+`;
