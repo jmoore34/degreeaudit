@@ -163,7 +163,7 @@ export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
         view =
             <>
                 <h2>The credits required are:</h2>
-                <ul>
+                <ul style={{listStyle: "none"}}>
                     <li>010 Communication (6 semester credit hours)</li>
                     <li>020 Mathematics (3 semester credit hours)</li>
                     <li>030 Life and Physical Sciences (6 semester credit hours)</li>
