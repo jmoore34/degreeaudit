@@ -37,6 +37,7 @@ export const Input = styled.input`
 export const AccordionContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.6em;
     width: 500px;
     max-width: 95vw;
 `
