@@ -29,20 +29,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="857c1ea1-d72f-423b-a436-ba2f97d0aef5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/flask_backend/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/ecs_degreeaudit_DB_connection/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/ecs_degreeaudit_DB_connection/addClassReq.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/ecs_degreeaudit_DB_connection/createTable.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/ecs_degreeaudit_DB_connection/mysqlConnectionTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flask_backend/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlaskIntro/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlaskIntro/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlaskIntro/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlaskIntro/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AdvisorFlowchart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/BoxAnnotation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/BoxAnnotation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CourseInfoBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CourseInfoBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/StudentFlowchart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StudentFlowchart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/flowchart_components_in_common.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/flowchart_components_in_common.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/small_components.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/small_components.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dropdownData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dropdownData.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/regex.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/regex.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/useFlowchart.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/useFlowchart.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/util.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/ecs_degreeaudit_DB_connection/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/ecs_degreeaudit_DB_connection/addClassReq.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/ecs_degreeaudit_DB_connection/createTable.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/ecs_degreeaudit_DB_connection/mysqlConnectionTest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlaskIntro/setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hello.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hello.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/json/CS2020.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/json/CS2020.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +116,8 @@
       <workItem from="1607393693244" duration="2000" />
       <workItem from="1607722661299" duration="399000" />
       <workItem from="1614811863160" duration="6541000" />
-      <workItem from="1614823686460" duration="701000" />
+      <workItem from="1614823686460" duration="1417000" />
+      <workItem from="1614825397307" duration="2050000" />
     </task>
     <task id="LOCAL-00001" summary="Advisor flowchart: fix circular dependency and improve annotations">
       <created>1606781060925</created>
@@ -302,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607188982359</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Add more comments">
+      <created>1614824776054</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1614824776054</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,7 +346,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add password hash file to .gitignore" />
     <MESSAGE value="Cosmetic fixes&#10;&#10;Flowchart updates&#10;Remove unneeded text in student flowchart" />
     <MESSAGE value="Add setup.py" />
     <MESSAGE value="Add req" />
@@ -358,6 +370,7 @@
     <MESSAGE value="Change favicon.ico" />
     <MESSAGE value="Minor json change" />
     <MESSAGE value="2nd page spacing change" />
-    <option name="LAST_COMMIT_MESSAGE" value="2nd page spacing change" />
+    <MESSAGE value="Add more comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add more comments" />
   </component>
 </project>

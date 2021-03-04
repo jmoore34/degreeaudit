@@ -1,8 +1,19 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Setup - Read me first
+
+Run the following commands to get started:
+
+1. `cd flask_backend`
+2. `python3 -m venv venv`
+3. `/venv/Scripts/activate` (Unix) or `venv/Scripts/activate.bat` (Windows)
+4. `python3 setup.py`
+
+`setup.py` runs a series of setup commands. If need be, however, you can run these commands manually.
+
 
 ## Available Scripts
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-In the project directory, you can run:
+In the root project directory, you can run:
 
 ### `yarn start`
 
