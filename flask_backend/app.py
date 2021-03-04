@@ -140,8 +140,6 @@ def pixelInfo():
             with open(filePath, 'r') as f:
                 return f.read()
 
-# Boilerplate, not used
-# Can be removed if desired
 @app.route('/api/img/<filename>', methods=['GET'])
 @cross_origin()
 def uploaded_file(filename):
