@@ -23,7 +23,7 @@ export const advisorDropdownYears: Array<DropdownItem> = [...yearGenerator()];
 
 // Students should not the current year as a catalog year until April
 // (note: months are zero indexed)
-export const studentDropdownYears: Array<DropdownItem> = (new Date().getMonth() >= 3) ? advisorDropdownYears : advisorDropdownYears.filter(year => year.label !== new Date().getFullYear().toString())
+export const studentDropdownYears: Array<DropdownItem> = (new Date().getMonth() >= 3) ? advisorDropdownYears : advisorDropdownYears.filter(year => Number(year.label) < new Date().getFullYear())
 
 export const dropdownDefaultMajor = dropdownMajors[0]
 export const advisorDropdownDefaultYear = advisorDropdownYears[0]
