@@ -21,6 +21,7 @@ import {
     useSemesterMapState
 } from "../persistentStateHooks";
 import { StyledRadioGroup } from "../App";
+// Some component libraries aren't written in Typescript; hence we tell Typescript it's okay not try to type-check them
 // @ts-ignore
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 // @ts-ignore
@@ -32,28 +33,39 @@ import html2PDF from 'jspdf-html2canvas';
 import Color from "color";
 
 // Used to reset image cache on page load in case advisors have changed flowchart images
+// (I.e., random value that is chosen once per session and appended to image requests to force the browser to not
+// use possibly stale versions of the images from previous sessions)
 const flowchartImageVersion = Math.random()
 
 export const StudentFlowchart: FunctionComponent<{}> = () => {
     // map of courses to the semester the student plans to take them
     const [courseSemestersMap, setCourseSemesters]: any = useSemesterMapState()
-    // course selected / to be shown in CourseInfoBox
+    // course (name) selected / to be shown in CourseInfoBox
     const [selectedCourse, setSelectedCourse]: any = useState("");
     // map of courses to a "nick name"
     // in practice, this is used for giving more specific selections to cores, electives, etc.
-    // e.g. this allows a student to assign LIT 1302 to a core
+    // e.g. this allows a student to assign LIT 1302 to a core (e.g. Core''')
+    //  Subnote: Often a flowchart will have several courses with the same name (e.g. "Core")
+    //  However, because we are using a map, we want course names to be unique
+    //  So, we internally store these course names as Core, Core', Core'', etc.
+    //  But we hide this from both the advisor and student by removing these characters before rendering course names
+    //  So an advisor will just create a new course box named "Core" and the rename handler will worry about modifying
+    //  the name under the hood to make it unique. (It will still be rendered just as "Core")
     const [nicknameMap, setNicknameMap]: any = useNicknameMapState({})
 
     // hook to make the page responsive to resize
     useRerenderOnResizeAndOnScroll()
 
+    // Following two hooks are custom because they also sync their state with LocalStorage
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(studentDropdownDefaultYear)
+    // Name of selected flowchart (e.g. "CS2021")
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
-    const [mode, setMode] = useState("flowchart") // flowchart vs overview
+    const [mode, setMode] = useState("flowchart") // visual flowchart vs overview/list view
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false); // used for the confirm clear all dialog
-    const { flowchart } = useFlowchart(selectedFlowchart) // gets the selected flowchart from the server
+    const { flowchart } = useFlowchart(selectedFlowchart) // hook that gets the selected flowchart's course box positioning data from the server
 
+    // Displayed in visual flowchart mode
     const flowView = <>
         <div>
             <h1>Please color your classes according to which semester you plan on taking them</h1>
@@ -73,11 +85,11 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
                     options={studentDropdownYears}
                 />
                 <WhiteSpaceBlock />
-                <Button variant="contained" onClick={() => {
+                <Button variant="contained" onClick={() => { // Button to export flowchart as image
 
                     const exportPage = document.getElementsByClassName("exportImage");
 
-                    console.log(exportPage)
+                    //console.log(exportPage)
 
                     if (exportPage) {
                         setSelectedCourse(null); // so that the CourseInfoBox is hidden
@@ -99,7 +111,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
 
                 }}>Export as Image</Button>
                 <WhiteSpaceBlock size="1em" />
-                <Button variant="contained" onClick={() => {
+                <Button variant="contained" onClick={() => { // Export as PDF button
 
                     const exportPage = document.getElementsByClassName("exportImage");
 
@@ -134,7 +146,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
             </Row>
         </div>
         <FlowchartWrapper className='exportImage'>
-            <CourseInfoBox
+            <CourseInfoBox // info box that pops up when a course is selected
                 flowchartBox={(flowchart.find(box => box.name === selectedCourse)) ?? null as FlowchartBox | null}
                 semester={courseSemestersMap[selectedCourse]}
                 onSemesterChanged={(newSemester: string) => {
@@ -154,6 +166,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
             />
             <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + `.png?ver=${flowchartImageVersion}`} />
             {flowchart.map(box => <>
+                {/*The colored course boxes, as well as their corresponding annotations which display the course's name*/}
                 <HighlightBox box={box}
                     color={getColorOfSemester(courseSemestersMap[box.name])}
                     onClick={() => {
@@ -175,6 +188,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
         </FlowchartWrapper>
     </>
 
+    // Overview/list view
     // @ts-ignore
     const semesters = ["Taken", ...semesterGenerator()]
     const overView = <>
@@ -201,7 +215,7 @@ export const StudentFlowchart: FunctionComponent<{}> = () => {
         {mode === "flowchart" ? flowView : overView}
 
 
-        <Dialog
+        <Dialog // Confirmation dialog for deleting all class selections, only shown/visible after clear all button pressed
             open={confirmDialogOpen}
             onClose={() => setConfirmDialogOpen(false)}
             aria-labelledby="alert-dialog-title"

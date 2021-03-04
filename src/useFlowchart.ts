@@ -9,7 +9,8 @@ interface useFlowchartReturn {
     updateFlowchart: (newFlowchart: Array<FlowchartBox>) => void
 }
 
-// given a flowchart name, a hook that fetches the corresponding flowchart data from the server
+// Given a flowchart name, a hook that fetches the corresponding flowchart data from the server
+// Also allows changing of that flowchart's position JSON data via updateFlowchart
 export function useFlowchart(flowchartName: string): useFlowchartReturn {
     const [flowchart, __setFlowchart] = useState<Array<FlowchartBox>>([])
 

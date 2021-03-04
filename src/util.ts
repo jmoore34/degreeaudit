@@ -3,6 +3,7 @@ import { currentSemester } from "./components/CourseInfoBox";
 
 // react hook to rerender on window resize and on window scroll
 // TODO: Improve performance by not having causing a rerender on every single callback (e.g. waiting till the end, using a setTimeout, etc)
+// (although not urgent, seems to run fine on most browsers)
 export function useRerenderOnResizeAndOnScroll() {
     const [, forceRerender] = useReducer(x => x + 1, 0)
     useEffect(() => {
@@ -36,6 +37,9 @@ export function renameSemester(semester: string): string {
 
 
 //Array of colors that the courseinfobox buttons will cycle through
+//We used to use random generated ones, but manually selecting them has two advantages
+// 1. Avoid similar colors sometimes ending up next to each other
+// 2. Consistent -- due to the getColorOfSemester algorithm, a given semester will always be the same color, even if the student looks at it several semesters later
 const colors = ["#cc0058", "#3dffa5", "#fa5700", "#3D77FF", "#9900FF", "#00DB9A", "#E3FF42", "#FF00B3", "#0065A2", "#00DB9A", "#FF2E2E", "#FFBE0A"]
 
 /*Function that determines which semester is given to which color in the array above. The colors will repeat every four years
