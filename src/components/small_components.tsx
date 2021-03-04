@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import Select from "react-select";
 
+////////
+// Small, miscellaneous styled components used throughout the app
+////////
+
 export const WhiteSpaceBlock = styled.div<{size?: string}>`
     width: ${ props => props.size ?? "3em" };
     display: block;

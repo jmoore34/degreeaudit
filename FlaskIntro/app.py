@@ -33,13 +33,14 @@ app = Flask(__name__, static_folder='../build', static_url_path='/')
 def index():
     return app.send_static_file('index.html')
 
-
+# CORS needed in development if you want to host the Flask backend and React frontend separately (i.e., if you're doing yarn start instead of yarn build)
+# However, it's not necessarily needed in production (and the office of information security might not like it in prod)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'\xf39M\x89\xc7s-Y\xfa\x80\x0c\x04\x10WD\xe8\x05d\xe3\xdd\xd4A\x8f\xf3'
 
-
+# Not currently used in this file, see setup.py
 def change_password(newPassword):
     with open(PASSWORD_FILE, 'w') as f:
         f.write(sha256_crypt.encrypt(newPassword))
@@ -47,6 +48,12 @@ def change_password(newPassword):
 # uncomment to set password
 #change_password("password goes here")
 
+
+##########################
+# Password authentication:
+# There is one advisor password (no username) that advisors can use to do advisor-only tasks (e.g. upload flowchart PDFs)
+# They don't enter it in manually. Rather, they bookmark a special form of the URL to the site that has #PASSWORD_WOULD_GO_HERE at the end (i.e. #password if the password is password)
+# The client then strips/hides this part from the URL (so that onlookers can't see it) and stores it in a variable to use whenever making requests that need privileged access
 
 def is_correct_password(password):
     if not path.exists(PASSWORD_FILE):
@@ -78,7 +85,7 @@ def has_filetype(filename, filetype):
 
 # Flask documentation about HTTP requests on Node.js servers w/ CORs middleware https://flask-cors.readthedocs.io/en/latest/
 
-
+# Used to serve flowcharts to students, as well as for advisors to upload flowcharts
 @app.route('/api/pdf', methods=['GET', 'POST'])
 @cross_origin()
 def upload_file():
@@ -112,7 +119,8 @@ def upload_file():
             os.remove(UPLOAD_FOLDER + '/' + filename) # delete image now that pdf is saved
             return "ok"
 
-
+# Serves the position info JSON to students (i.e., for a given flowchart, the JSON position and naming data for all the course boxes that React uses)
+# Also API for advisor portal to update this data
 @app.route('/api/json', methods=['GET', 'POST'])
 @cross_origin()
 def pixelInfo():
@@ -132,7 +140,8 @@ def pixelInfo():
             with open(filePath, 'r') as f:
                 return f.read()
 
-
+# Boilerplate, not used
+# Can be removed if desired
 @app.route('/api/img/<filename>', methods=['GET'])
 @cross_origin()
 def uploaded_file(filename):

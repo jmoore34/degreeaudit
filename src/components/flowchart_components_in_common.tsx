@@ -2,6 +2,10 @@ import styled from "styled-components";
 import Color from "color";
 import {BoxAnnotation} from "./BoxAnnotation";
 
+//////////
+// A handful of styled components used by both StudentFlowchart and AdvisorFlowchart
+//////////
+
 export interface FlowchartBox {
     name: string
     left: any // percentage

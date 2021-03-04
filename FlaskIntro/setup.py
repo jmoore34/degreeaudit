@@ -3,8 +3,20 @@ import os
 # uncomment to set password
 #change_password("password goes here")
 
+
+print("******************************** NOTE *********************************")
+print("  NOTE: Make sure you've activated the virtual environment first!")
+print("  /venv/Scripts/activate (Unix) or venv\Scripts\activate.bat (Windows)")
+print("***********************************************************************")
+
+
+# *********************************************************
+# If you get errors, try running the below commands manually (with virtual environment activated as mentioned above)
+
 print("Installing dependencies...")
 print(" Running: pip3 install -r requirements.txt")
+
+
 os.system("pip3 install -r requirements.txt")
 
 
@@ -26,5 +38,8 @@ print(f"Student view accessible at https://ecsadvising.utdallas.edu/degreeaudit/
 
 print("")
 
-print("The flask application can serve the React application -- make sure to do `yarn build` first")
-print("(`yarn start` can still be used for development builds")
+print("The flask application can serve the React application -- make sure to do `yarn && yarn build` first")
+print("(`yarn && yarn start` can still be used for development builds) ")
+print("Either way, the backend can be started by doing:")
+print(" 1.  ./venv/Scripts/activate (Unix) or venv\Scripts\activate.bat (Windows) ")
+print(" 2.  flask run")

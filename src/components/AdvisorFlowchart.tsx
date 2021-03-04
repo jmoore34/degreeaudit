@@ -17,20 +17,30 @@ const courseNamePrompt = "Enter the class name"
 
 
 export const AdvisorFlowchart: FunctionComponent<{}> = () => {
+    // Like the student flowchart, a ref is needed because relative box sizing requires information about the size of the flowchart
     const flowchartRef = React.useRef(null)
+    // Similar purpose as above, useful because it causes boxes to rerender when a new flowchart image is loaded
     const [flowchartElement, setFlowchartElement] = useState<any>(null)
+    // Important hook that allows the flowchart to be responsive to screen size changes (i.e. resize) & scrolling (i.e., ensure position data correct)
     useRerenderOnResizeAndOnScroll()
 
+    // State of top selectors (custom hooks auto-synchronize this state with LocalStorage)
     const [selectedMajor, setSelectedMajor] = useSelectedMajorState<DropdownItem | null>(dropdownDefaultMajor)
     const [selectedYear, setSelectedYear] = useSelectedYearState<DropdownItem | null>(advisorDropdownDefaultYear)
 
+    // Computed value - current flowchart name (i.e. "CS2021")
     const selectedFlowchart = (selectedYear?.value && selectedMajor?.value) ? (selectedMajor.value + selectedYear.value) : ""
 
+    // Hook for the JSON box positioning data for the current flowchart
+    // updateFlowchart changes the JSON data for the current flowchart
+    // This is a custom hook rather than a simple useState because besides holding state, it also gets & sends data to/from the server
     const { flowchart, updateFlowchart } = useFlowchart(selectedFlowchart)
 
-    // appended to the src of the flowchart image
-    // incremented on image uploads
+    // flowchartImageVersion appended to the `src` tag of the flowchart image
+    // Incremented on image uploads by calling incrementFlowchartImageVersion()
+    // This doesn't actually change the image that's fetched from the server
     // ∴ forces image rerender when a new flowchart image is uploaded
+    // (otherwise the browser will always cache the image, which is a problem when the advisor makes changes)
     const [flowchartImageVersion, incrementFlowchartImageVersion] = useReducer( (old: number) => old + Math.random(), Math.random())
 
     return <>
@@ -59,6 +69,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                 <h2>Replace current flowchart's PDF</h2>
                 {/* https://kiranvj.com/blog/blog/file-upload-in-material-ui/ */ }
                 <label>
+                    {/* File upload: We use a hidden <input type="file"> for the actual browser functionality, but the user sees the Material UI button. */}
                     <input
                         style={{display: "none"}} // gives functionality, but MUI button is what user actually sees
                         type='file'
@@ -79,7 +90,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
                                         'Content-Type': 'multipart/form-data'
                                     }
                                 }).then(() => {
-                                    console.log("Then");
+                                    //console.log("Then");
                                     const year = selectedYear;
                                     incrementFlowchartImageVersion()
                                 }).catch((err) => {
@@ -101,6 +112,7 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             <FlowchartBackground src={"http://127.0.0.1:5000/api/img/" + selectedFlowchart + ".png" + `?ver=${flowchartImageVersion}`}
                 onLoad={() => setFlowchartElement(flowchartRef.current)}
                 onContextMenu={e => {
+                    // Right clicking flowchart creates a new flowchart box
                     e.preventDefault()
                     if (flowchartElement != null) {
                         let name = prompt(courseNamePrompt)
@@ -125,6 +137,9 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
             {flowchart.map((box: FlowchartBox) => <ResizableBox
                 box={box}
                 flowchart={flowchartElement}
+                // When the boxes are moved, renamed, deleted (by renaming to empty string), etc, they notify us here
+                // We then update the flowchart box map to reflect their change (they can't do this themselves because they can only
+                // change their local state, not the whole flowchart state)
                 onBoxChange={(box: FlowchartBox) => {
                     const newFlowchart = [...flowchart]
                     newFlowchart[flowchart.findIndex(b => b.name === box.name)] = box
@@ -147,7 +162,9 @@ export const AdvisorFlowchart: FunctionComponent<{}> = () => {
 
 }
 
-
+// We usually use styled-components to style things
+// However this is an exception for the drag and drop boxes
+// A refactor to use styled-components here may be possible but isn't strictly necessary
 const resizeableBoxStyle = (circle: boolean) => ({
     display: "flex",
     alignItems: "center",
@@ -158,7 +175,8 @@ const resizeableBoxStyle = (circle: boolean) => ({
 });
 
 
-
+// Like FlowchartBox for student, but editable (draggable, renameable, etc)
+// Takes relative sizes and positions (% not pixels); internally converts to and from pixels under the hood
 interface ResizeableBoxProps {
     box: FlowchartBox
     onBoxChange: (box: FlowchartBox) => any
@@ -171,6 +189,10 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
     if (props.flowchart == null || props.flowchart.clientWidth > props.flowchart.clientHeight)
         return null
 
+    // From a black-box POV, ResizeableBox takes and outputs just relative sizes and positions
+    // because we want relative sizes so it works on any screen size
+    // However, the drag and drop library uses absolute coordinates & sizes relative to its container (that is, pixels)
+    // So we convert as needed
     const flowchart = props.flowchart.getBoundingClientRect()
     const x = props.box.left / 100 * flowchart.width
     const y = props.box.top / 100 * flowchart.height
@@ -188,6 +210,7 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
             size={{ width, height }}
             position={{ x, y }}
             style={resizeableBoxStyle(props.box.name.includes("core"))}
+            // Dragging and dropping flowchart boxes (with left mouse pointer) works as expected
             onDragStop={(e, data) => {
                 props.onBoxChange({
                     ...props.box,
@@ -207,6 +230,8 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
                 }
                 props.onBoxChange(newBox)
             }}
+            // Right clicking a flowchart box opens rename dialog
+            // Entering an empty name deletes the box
             onContextMenu={(e: Event) => {
                 e.preventDefault()
                 const newName = prompt(courseNamePrompt + "\n\n(Leave empty to delete box)")
@@ -217,6 +242,8 @@ const ResizableBox: FunctionComponent<ResizeableBoxProps> = (props) => {
         >
 
         </Rnd>
+
+        {/*Shows course name under each box*/}
         <BoxAnnotation boxHeight={height} style={{
             top: (y + height) + "px",
             left: x + "px",

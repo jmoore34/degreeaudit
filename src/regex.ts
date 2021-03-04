@@ -1,6 +1,7 @@
 
-// Given a name, returns a modified version of the name that is sure to be unique
+// Given a course name, returns a modified version of the name that is sure to be unique
 // It does this by adding quote marks until the name is unique
+// For more info, see the comment above the definition for nicknameMap in StudentFlowchart.tsx
 const CHAR_TO_APPEND_TO_NAMES = "'"
 export function ensureNameUnique(name: string, existingNames: Array<string>) {
     while (existingNames.includes(name))

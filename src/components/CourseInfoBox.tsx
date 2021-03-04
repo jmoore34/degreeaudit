@@ -7,6 +7,9 @@ import { getColorOfSemester } from "../util";
 import {getUrlReadyCourseName} from "../regex";
 import {TextField, Button} from "@material-ui/core";
 
+////////////
+// The following are a bunch of components and functions used in CourseInfoBox
+////////////
 
 const InfoBox = styled.div <{ flowchartBox: FlowchartBox }>`
     z-index: 10;
@@ -69,6 +72,9 @@ const SiblingDiv = styled.div <{}>`
     height: 390px;
 `
 
+// semesterGenerator() generates a list of terms (e.g. Spring 21) starting with the current one that will be placed in the CourseInfoBox's buttons
+// Current term calculated below
+// Successive terms calculated via getNextSemester()
 const now = new Date()
 var currentTerm: string;
 // (note: now.getMonth() is 0-indexed
@@ -159,6 +165,8 @@ export const CourseInfoBox: FunctionComponent<CourseInfoBoxProps> = (props) => {
     const semesters = ["Taken", ...semesterGenerator()]
 
     // view -- variable content that depends on course type
+    // For basic course names, we just fetch the matching entry from the catalog
+    // However, we implement custom behavior for things like senior guided elective, free elective, core, etc.
     let view =
         <CourseFrame src={"https://catalog.utdallas.edu/" + props.catalogYear + "/undergraduate/courses/" + getUrlReadyCourseName(course)} height="400" width="600" scrolling="no"></CourseFrame>
     if (course.includes('core')) {
