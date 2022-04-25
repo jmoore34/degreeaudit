@@ -1,3 +1,22 @@
+# Degree Audit Tool
+
+## What is it?
+
+This is a full-stack web application that allows students to easily plan out their course progresson and share their plan with their academic advisor. It was comissoned by the UTD Engineering and Computer Science Advising Department and implemented in TypeScript (React) and Python (Flask).
+
+### Student View
+
+Students are able to create a persistent degree plan by annotating flowcharts uploaded by advisors. Then, they can easily export their plan as a PNG or PDF file. 
+
+![firefox_0ZwHinDc1d](https://user-images.githubusercontent.com/1783464/165188808-123bad3a-fe6a-4f80-978b-9f426208fb85.gif)
+
+### Advisor View
+
+Advisors are able to upload blank PDF flowcharts which the app will then store as an image. Then, the advisors can use an easy drag-and-drop interface to create, move, resize, rename, and delete class overlays. Students will then automatically be able to interact with the class overlays in the flowcharts. Advisors can also test the flowcharts by stepping into Student View.
+
+![firefox_pps9ohVwGh](https://user-images.githubusercontent.com/1783464/165189173-b4553fbd-7225-4b1f-821c-69c5384d240d.gif)
+
+
 ## Setup - Read me first
 
 Run the following commands to get started:
@@ -8,48 +27,3 @@ Run the following commands to get started:
 4. `python3 setup.py`
 
 `setup.py` runs a series of setup commands. If need be, however, you can run these commands manually.
-
-
-## Available Scripts
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-In the root project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
