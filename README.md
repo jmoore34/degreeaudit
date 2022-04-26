@@ -1,5 +1,8 @@
 # Degree Audit Tool
 
+[![Made with Python](https://img.shields.io/badge/Python-Flask-blue?logo=python&logoColor=white)](https://python.org "Go to Python homepage")
+[![Made with TypeScript](https://img.shields.io/badge/TypeScript-React-blue?logo=typescript&logoColor=white)](https://typescriptlang.org "Go to TypeScript homepage")
+
 ## What is it?
 
 This is a full-stack web application that allows students to easily plan out their course progresson and share their plan with their academic advisor. It was comissoned by the UTD Engineering and Computer Science Advising Department and implemented in TypeScript (React) and Python (Flask).
