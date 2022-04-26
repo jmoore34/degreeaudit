@@ -17,7 +17,7 @@ Advisors are able to upload blank PDF flowcharts which the app will then store a
 ![firefox_pps9ohVwGh](https://user-images.githubusercontent.com/1783464/165189173-b4553fbd-7225-4b1f-821c-69c5384d240d.gif)
 
 
-## Setup - Read me first
+## Setup
 
 Run the following commands to get started:
 
